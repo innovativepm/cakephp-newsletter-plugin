@@ -17,7 +17,7 @@ class TestSubscriptionsController extends SubscriptionsController {
     }
     
     function paginate($object = null, $scope = array(), $whitelist = array()) {
-      return $this->Subscription->find('all');
+      return $this->Subscription->find('all', array('conditions' => $scope));
     }
  
     function _stop($status = 0) {
@@ -41,6 +41,15 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->Subscriptions->admin_index();
       
       $this->assertNotNull($this->Subscriptions->viewVars['subscriptions']);
+      
+      //with filter
+      $this->Subscriptions->data = array('Filter' => array('value' => 'someone@subscribed.com')); 
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->admin_index();
+      
+      $this->assertNotNull($this->Subscriptions->viewVars['subscriptions']);
+      $this->assertEqual('1', $this->Subscriptions->viewVars['subscriptions'][0]['Subscription']['id']);
     }
     
     function testAdminAdd() {

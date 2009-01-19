@@ -5,8 +5,10 @@
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
-		  'limit' => 40,
-		  'order' => array('Subscription.email' => 'asc')
+	    'Subscription' => array(
+		    'limit' => 40,
+		    'order' => array('Subscription.email' => 'asc')
+		  )
 	  );
 	  
 	 function beforeFilter() {
@@ -15,7 +17,17 @@
     }
 	  
 	  function admin_index() {
-		  $this->set('subscriptions', $this -> paginate());
+	    $conditions = null;
+	  
+	    if($this->isNotEmpty('Filter.value')) {
+	      $filter = $this->data['Filter']['value'];
+	      $conditions = array('OR' => array(
+					'Subscription.name LIKE' => '%'.$filter.'%',
+					'Subscription.email LIKE' => '%'.$filter.'%',
+					)
+				);
+	    }
+		  $this->set('subscriptions', $this -> paginate('Subscription', $conditions));
 	  }
 	  
 	  public function admin_add() {

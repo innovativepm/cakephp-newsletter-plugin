@@ -4,6 +4,10 @@
   <li><?php echo $html->link(__('Add subscription', true), '/admin/newsletter/subscriptions/add', array('class' => 'button add')); ?></li>
 </ul>
 
+<?php echo $form->create('Filter', array('url' => '/admin/newsletter/subscriptions/index' ) ); ?>
+<?php echo $form->input('Filter.value', array('label' => __('Filter', true))); ?>
+<?php echo $form->end(__( 'Filter', true)); ?>
+
 <div class="block">
     <h3><span><?php __( 'View subscriptions'); ?></span></h3>
     <table cellspacing="0">
