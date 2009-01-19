@@ -1,5 +1,5 @@
 <?php
-  class Subscription extends AppModel {
+  class Subscription extends NewsletterAppModel {
 
 	  var $name = 'Subscription';
 	  var $primaryKey = 'id';
