@@ -133,6 +133,84 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $result = $this->Subscriptions->Subscription->read(null, 3); //already in opt_out
       $this->assertNull($result['Subscription']['opt_out_date']);
     }
+    
+    function testUnsubscribe() {
+      $this->Subscriptions->data = array('Subscription' => array('email' => 'someone@subscribed.com'));
+    
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->unsubscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, 1);
+      $this->assertNotNull($result['Subscription']['opt_out_date']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      $this->Subscriptions->data = array('Subscription' => array('email' => 'notfound'));
+    
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->unsubscribe();
+      
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+    }
+    
+    function testSubscribe() {
+      #test for new subscriptions
+      $this->Subscriptions->data = array('Subscription' => array('name' => 'New Subscription', 'email' => 'new@subscription.com'));
+      
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->subscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, $this->Subscriptions->Subscription->id);
+      $this->assertNotNull($result);
+      $this->assertEqual($result['Subscription']['name'], 'New Subscription');
+      $this->assertEqual($result['Subscription']['email'], 'new@subscription.com');
+      $this->assertNotNull($result['Subscription']['confirmation_code']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #test for existing subscription currently in opt_out
+      $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'opt@out.com'));
+      
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->subscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, 3);
+      $this->assertNotNull($result);
+      $this->assertEqual($result['Subscription']['name'], 'New Name');
+      $this->assertEqual($result['Subscription']['email'], 'opt@out.com');
+      $this->assertNotNull($result['Subscription']['confirmation_code']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #test for existing subscription currently waiting confirmation
+      $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'someone@waiting.com'));
+      
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->subscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, 2);
+      $this->assertNotNull($result);
+      $this->assertEqual($result['Subscription']['name'], 'New Name');
+      $this->assertEqual($result['Subscription']['email'], 'someone@waiting.com');
+      $this->assertNotNull($result['Subscription']['confirmation_code']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #test for existing subscription currently in opt_in
+      $this->Subscriptions->data = array('Subscription' => array('name' => 'Any Name', 'email' => 'someone@subscribed.com'));
+      
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->subscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, 1);
+      $this->assertNotNull($result);
+      $this->assertEqual($result['Subscription']['name'], 'Subscribed');
+      $this->assertEqual($result['Subscription']['email'], 'someone@subscribed.com');
+      $this->assertNull($result['Subscription']['confirmation_code']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+    }
  
     function endTest() {
       $this->Subscriptions->Session->destroy();

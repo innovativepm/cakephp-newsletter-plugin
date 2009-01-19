@@ -13,8 +13,55 @@
 	  
 	 function beforeFilter() {
       parent::beforeFilter();
-      #$this->Auth->allow();
+      $this->Auth->allow('opt_in', 'opt_out');
     }
+    
+    #Public
+    
+    function unsubscribe() {
+      if($this->isNotEmpty('Subscription.email')) {
+        $subscribed = $this->Subscription->findByEmail($this->data['Subscription']['email']);
+        if($subscribed) {
+          $this->Subscription->id = $subscribed['Subscription']['id'];
+          $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
+          
+          #TODO send email
+          $this->Session->setFlash(__('The requested email was withdrawn from the mail list', true));
+        } else {
+          $this->Session->setFlash(__('Email not in subscription list', true));
+        }
+      }
+    }
+    
+    function subscribe() {
+      if(!empty($this->data) && $this->isNotEmpty('Subscription.email')) {
+        $subscribed = $this->Subscription->findByEmail($this->data['Subscription']['email']);
+        
+        #if the email isn't yet registered or if it already exists but is into opt_out or it's waiting for confirmation, 
+        #save and set the user confirmation code and send email, otherwise tell the user he already is opt_in
+        if(empty($subscribed) || 
+          !empty($subscribed['Subscription']['opt_out_date']) ||
+          !empty($subscribed['Subscription']['confirmation_code'])
+        ) {
+          $confirmation_code = md5($this->data['Subscription']['name'].$this->data['Subscription']['email']);
+          
+          if(!empty($subscribed)) {
+            $this->data['Subscription']['id'] = $subscribed['Subscription']['id'];
+          }
+          
+          $this->data['Subscription']['confirmation_code'] = $confirmation_code;
+          $this->Subscription->set($this->data);
+          $this->Subscription->save();
+          
+          $this->Session->setFlash(__('A confirmation message was sent to your email', true));
+          #TODO send email
+        } else {
+          $this->Session->setFlash(__('The requested email is already into the list', true));
+        }
+      }
+    }
+    
+    #Admin
 	  
 	  function admin_index() {
 	    $conditions = null;
