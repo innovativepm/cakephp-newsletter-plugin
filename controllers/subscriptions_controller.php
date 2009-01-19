@@ -13,14 +13,14 @@
 	  
 	 function beforeFilter() {
       parent::beforeFilter();
-      $this->Auth->allow('opt_in', 'opt_out');
+      $this->Auth->allow('unsubscribe', 'subscribe', 'confirm_subscription');
     }
     
     #Public
     
     function unsubscribe() {
       if($this->isNotEmpty('Subscription.email')) {
-        $subscribed = $this->Subscription->findByEmail($this->data['Subscription']['email']);
+        $subscribed = $this->Subscription->find('first', array('conditions' => array('email' => $this->data['Subscription']['email'], 'opt_out_date' => null)));
         if($subscribed) {
           $this->Subscription->id = $subscribed['Subscription']['id'];
           $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
@@ -64,11 +64,13 @@
     function confirm_subscription($id) {
       $subscribed = $this->Subscription->findByConfirmationCode($id);
       
-      if(!empty($subscribed)) {
+      if(!empty($id) && !empty($subscribed)) {
         $subscribed['Subscription']['opt_out_date'] = null;
         $subscribed['Subscription']['confirmation_code'] = null;
         $this->Subscription->set($subscribed);
         $this->Subscription->save();
+        
+        $this->set('subscribed', $subscribed);
         
         $this->Session->setFlash(__('Subscription confirmed', true));
       } else {

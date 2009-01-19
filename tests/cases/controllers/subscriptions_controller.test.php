@@ -135,6 +135,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
     }
     
     function testUnsubscribe() {
+      #test for subscribed user
       $this->Subscriptions->data = array('Subscription' => array('email' => 'someone@subscribed.com'));
     
       $this->Subscriptions->beforeFilter();
@@ -145,12 +146,24 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($result['Subscription']['opt_out_date']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       
+      #test for not yet subscribed user
       $this->Subscriptions->data = array('Subscription' => array('email' => 'notfound'));
     
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->unsubscribe();
       
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #test for subscribed user already in opt_out
+      $this->Subscriptions->data = array('Subscription' => array('email' => 'opt@out.com'));
+    
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->unsubscribe();
+      
+      $result = $this->Subscriptions->Subscription->read(null, 1);
+      $this->assertNotNull($result['Subscription']['opt_out_date']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
     }
     
@@ -222,6 +235,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($result);
       $this->assertNull($result['Subscription']['confirmation_code']);
       $this->assertNull($result['Subscription']['opt_out_date']);
+      $this->assertNotNull($this->Subscriptions->viewVars['subscribed']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       
       #test for invalid confirmation code
