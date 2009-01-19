@@ -54,5 +54,18 @@
       }
       $this->redirect(array('action' => 'index'));
     }
+    
+    public function admin_invert_opt_out($id) {
+      $this->Subscription->id = $id;
+      $subscribed = $this->Subscription->read();
+      
+      if($subscribed['Subscription']['opt_out_date']) {
+        $this->Subscription->saveField('opt_out_date', null);
+      } else {
+        $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
+      }
+      $this->Session->setFlash(__('Subscription updated', true));
+      $this->redirect(array('action' => 'index'));
+    }
   }
 ?>

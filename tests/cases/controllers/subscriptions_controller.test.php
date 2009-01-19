@@ -106,6 +106,24 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'index'));
     }
+    
+    function testInvertOptOut() {
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->admin_invert_opt_out(1);
+      
+      //assert the record was changed
+      $result = $this->Subscriptions->Subscription->read(null, 1); //not into opt_out
+      $this->assertNotNull($result['Subscription']['opt_out_date']);
+      
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->admin_invert_opt_out(3);
+      
+      //assert the record was changed
+      $result = $this->Subscriptions->Subscription->read(null, 3); //already in opt_out
+      $this->assertNull($result['Subscription']['opt_out_date']);
+    }
  
     function endTest() {
       $this->Subscriptions->Session->destroy();
