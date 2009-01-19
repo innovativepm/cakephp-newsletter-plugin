@@ -43,7 +43,7 @@
           !empty($subscribed['Subscription']['opt_out_date']) ||
           !empty($subscribed['Subscription']['confirmation_code'])
         ) {
-          $confirmation_code = md5($this->data['Subscription']['name'].$this->data['Subscription']['email']);
+          $confirmation_code = md5(date('Y-m-d H:i:s').$this->data['Subscription']['name'].$this->data['Subscription']['email']);
           
           if(!empty($subscribed)) {
             $this->data['Subscription']['id'] = $subscribed['Subscription']['id'];
@@ -60,6 +60,21 @@
         }
       }
     }
+    
+    function confirm_subscription($id) {
+      $subscribed = $this->Subscription->findByConfirmationCode($id);
+      
+      if(!empty($subscribed)) {
+        $subscribed['Subscription']['opt_out_date'] = null;
+        $subscribed['Subscription']['confirmation_code'] = null;
+        $this->Subscription->set($subscribed);
+        $this->Subscription->save();
+        
+        $this->Session->setFlash(__('Subscription confirmed', true));
+      } else {
+        $this->Session->setFlash(__('Invalid confirmation code', true));
+      }
+    } 
     
     #Admin
 	  

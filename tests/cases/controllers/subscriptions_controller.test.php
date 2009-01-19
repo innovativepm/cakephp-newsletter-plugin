@@ -211,6 +211,26 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
     }
+    
+    function testConfirmSubscription() {
+      #test for existing subscription currently waiting confirmation
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->confirm_subscription('some_code');
+      
+      $result = $this->Subscriptions->Subscription->read(null, 2);
+      $this->assertNotNull($result);
+      $this->assertNull($result['Subscription']['confirmation_code']);
+      $this->assertNull($result['Subscription']['opt_out_date']);
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #test for invalid confirmation code
+      $this->Subscriptions->beforeFilter();
+      $this->Subscriptions->Component->startup($this->Subscriptions);
+      $this->Subscriptions->confirm_subscription('invalid_code');
+      
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+    }
  
     function endTest() {
       $this->Subscriptions->Session->destroy();
