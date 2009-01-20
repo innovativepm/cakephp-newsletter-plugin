@@ -1,8 +1,22 @@
+<? if(!empty($errors)) { ?>
+      <p><?php echo __('The following errors ocourred during import:', true) ?></p>
+      <ul>
+        <? foreach($errors as $error) { ?>
+          <li><?php echo $error ?></li>
+        <? } ?>
+      </ul>
+<? } ?>
+
 <?php $paginator->url(array('admin' => true)); ?>
 
 <ul class="actions">
   <li><?php echo $html->link(__('Add subscription', true), '/admin/newsletter/subscriptions/add', array('class' => 'button add')); ?></li>
 </ul>
+
+<!--<?= $form->create('Subscription', array('url' => '/admin/newsletter/subscriptions/import_csv', 'type' => 'file')) ?>
+  <p><?= __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes)", true) ?></p>
+  <?= $form->file('csv', array('size' => '40'))?>
+<?= $form->end(__('Import', true)) ?>-->
 
 <?php echo $form->create('Filter', array('url' => '/admin/newsletter/subscriptions/index' ) ); ?>
 <?php echo $form->input('Filter.value', array('label' => __('Filter', true))); ?>
