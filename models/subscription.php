@@ -6,6 +6,8 @@
     var $displayField = 'email';
     var $useTable = 'newsletter_subscriptions';
     
+    var $actsAs   = array('extendAssociations');
+    
     var $hasAndBelongsToMany = array(
 				'Group' => array(
 					'className' => 'Group',

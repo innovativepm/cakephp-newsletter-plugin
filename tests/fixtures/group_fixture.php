@@ -7,6 +7,11 @@
         array ('id' => 1, 
         'name' => 'Main Group', 
         'created' => '2008-12-03 14:30:00', 
+        'modified' => '2008-12-03 14:30:00'),
+         
+        array ('id' => 2, 
+        'name' => 'Secondary Group', 
+        'created' => '2008-12-03 14:30:00', 
         'modified' => '2008-12-03 14:30:00'), 
     ); 
  } 

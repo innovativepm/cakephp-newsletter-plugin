@@ -71,6 +71,22 @@
         $this->assertNotNull($subscription['Group']);
         $this->assertEqual('1', $subscription['Group'][0]['id']);
       }
+      
+      function testHABTMBehaviour() {
+        $this->SubscriptionTest->habtmAdd('Group', 1, 2);
+        
+        $subscription = $this->SubscriptionTest->read(null, 1);
+        $this->assertNotNull($subscription['Group']);
+        $this->assertEqual('1', $subscription['Group'][0]['id']);
+        $this->assertEqual('2', $subscription['Group'][1]['id']);
+        
+        $this->SubscriptionTest->habtmDelete('Group', 1, 2);
+        
+        $subscription = $this->SubscriptionTest->read(null, 1);
+        $this->assertNotNull($subscription['Group']);
+        $this->assertEqual('1', $subscription['Group'][0]['id']);
+        $this->assertFalse(array_key_exists(1, $subscription['Group']));
+      }
 
   }
 ?>
