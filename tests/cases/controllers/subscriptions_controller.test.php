@@ -245,6 +245,24 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
     }
+    
+    /*function testValidateCSVLine() {
+      #test for valid line
+      $line = array();
+      array_push($line, 'valid@email.com');
+      array_push($line, 'Valid Name');
+      
+      $errors = $this->Subscriptions->validateCSVLine($line, 1);
+      $this->assertTrue(empty($errors));
+      
+      #test for invalid line
+      $line = array();
+      array_push($line, '');
+      array_push($line, 'Valid Name');
+      
+      $errors = $this->Subscriptions->validateCSVLine($line, 1);
+      $this->assertTrue(!empty($errors));
+    }*/
  
     function endTest() {
       $this->Subscriptions->Session->destroy();
