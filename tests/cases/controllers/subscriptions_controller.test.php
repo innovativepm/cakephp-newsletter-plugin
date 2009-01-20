@@ -27,7 +27,7 @@ class TestSubscriptionsController extends SubscriptionsController {
  
 class SubscriptionsControllerTestCase extends CakeTestCase {
 
-    var $fixtures = array('plugin.newsletter.subscription');
+    var $fixtures = array('plugin.newsletter.subscriptions_groups', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
  
     function startTest() {
       $this->Subscriptions = new TestSubscriptionsController();
