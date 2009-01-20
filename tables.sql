@@ -25,3 +25,15 @@ CREATE TABLE  `newsletter_subscriptions_groups` (
   PRIMARY KEY  (`id`),
   KEY `Foreign_Keys` (`newsletter_subscription_id`,`newsletter_group_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
+
+CREATE TABLE  `newsletter_mails` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `from` varchar(100) default NULL,
+  `from_email` varchar(100) default NULL,
+  `subject` varchar(100) default NULL,
+  `content` text,
+  `created` datetime default NULL,
+  `modified` datetime default NULL,
+  `read_confirmation_code` varchar(100) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8
