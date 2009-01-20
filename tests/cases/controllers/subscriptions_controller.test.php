@@ -186,6 +186,13 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       
+      #test if the user is added to the site group
+      $site_group = Configure::read('Newsletter.siteGroup');
+      if(!$site_group) {$site_group = 1;}
+        
+      $this->assertNotNull($result['Group']);
+      $this->assertEqual($site_group, $result['Group'][0]['id']);
+      
       #test for existing subscription currently in opt_out
       $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'opt@out.com'));
       

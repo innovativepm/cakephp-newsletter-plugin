@@ -53,6 +53,11 @@
           $this->Subscription->set($this->data);
           $this->Subscription->save();
           
+          #adds subscription to default site_group
+          $site_group = Configure::read('Newsletter.siteGroup');
+          if(!$site_group) {$site_group = '1';}
+          $this->Subscription->habtmAdd('Group', $this->Subscription->id, $site_group);
+          
           $this->Session->setFlash(__('A confirmation message was sent to your email', true));
           #TODO send email
         } else {
