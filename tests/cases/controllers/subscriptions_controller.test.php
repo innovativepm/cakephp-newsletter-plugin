@@ -194,6 +194,9 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       
+      #assert email sent
+      $this->assertEqual(1, $this->Subscriptions->sentEmail);
+      
       #test if the user is added to the site group
       $site_group = Configure::read('Newsletter.siteGroup');
       if(!$site_group) {$site_group = 1;}
@@ -215,6 +218,9 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       
+      #assert email sent
+      $this->assertEqual(2, $this->Subscriptions->sentEmail);
+      
       #test for existing subscription currently waiting confirmation
       $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'someone@waiting.com'));
       
@@ -228,6 +234,9 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertEqual($result['Subscription']['email'], 'someone@waiting.com');
       $this->assertNotNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #assert email sent
+      $this->assertEqual(3, $this->Subscriptions->sentEmail);
       
       #test for existing subscription currently in opt_in
       $this->Subscriptions->data = array('Subscription' => array('name' => 'Any Name', 'email' => 'someone@subscribed.com'));

@@ -25,6 +25,7 @@
           $this->Subscription->id = $subscribed['Subscription']['id'];
           $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
           
+          #send email
           $subject = Configure::read('Newsletter.unsubscribe_subject');
           if(!$subject) { $subject = 'Unsubscribe Confirmation'; }
            
@@ -63,8 +64,15 @@
           if(!$site_group) {$site_group = '1';}
           $this->Subscription->habtmAdd('Group', $this->Subscription->id, $site_group);
           
-          $this->Session->setFlash(__('A confirmation message was sent to your email', true));
-          #TODO send email
+          #send email
+          $subject = Configure::read('Newsletter.subscribe_subject');
+          if(!$subject) { $subject = 'Subscription Confirmation'; }
+           
+          $subscription = $this->Subscription->read(null, $this->Subscription->id); 
+          $this->set('confirmation_code', $subscription['Subscription']['confirmation_code']);
+          $this->sendEmail($subject, 'subscribe', $subscription['Subscription']['email']);  
+          
+          $this->Session->setFlash(__('A confirmation message was sent to your email', true)); 
         } else {
           $this->Session->setFlash(__('The requested email is already into the list', true));
         }

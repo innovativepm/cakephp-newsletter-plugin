@@ -36,10 +36,10 @@ class NewsletterAppController extends AppController {
   * @return
   * @access
   **/
-  function sendEmail($subject, $view, $to=null, $from = null, $fromName = null) {
+  function sendEmail($subject, $view, $to=null, $from_email = null, $from = null) {
+    if(!$from_email) {$from_email = Configure::read('Newsletter.from_email');} #Required
     if(!$from) {$from = Configure::read('Newsletter.from');} #Required
-    if(!$fromName) {$fromName = Configure::read('Newsletter.from_email');} #Required
-    return parent::sendEmail($subject, $view, $to, $from, $fromName);
+    return parent::sendEmail($subject, $view, $to, $from_email, $from);
   }
   
 }
