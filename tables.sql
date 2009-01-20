@@ -20,7 +20,8 @@ CREATE TABLE  `newsletter_groups` (
 
 CREATE TABLE  `newsletter_subscriptions_groups` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `subscription_id` int(10) unsigned NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8
+  `newsletter_subscription_id` int(10) unsigned NOT NULL,
+  `newsletter_group_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `Foreign_Keys` (`newsletter_subscription_id`,`newsletter_group_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
