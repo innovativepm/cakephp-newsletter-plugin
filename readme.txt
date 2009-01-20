@@ -1,2 +1,2 @@
 Requires:
-Sluggable-Behaviour http://cake-syrup.sourceforge.net/ingredients/sluggable-behavior/
+Extend-Associations: http://bakery.cakephp.org/articles/view/add-delete-habtm-behavior
