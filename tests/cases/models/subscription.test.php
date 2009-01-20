@@ -1,9 +1,10 @@
 <?php 
   App::import('Model', 'Newsletter.Subscription');
+  App::import('Model', 'Newsletter.Group');
 
   class SubscriptionCase extends CakeTestCase {
 
-      var $fixtures = array('plugin.newsletter.subscription');
+      var $fixtures = array('plugin.newsletter.subscriptions_groups', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
       var $SubscriptionTest;
       
       function start() {
@@ -65,6 +66,11 @@
         $this->assertNotNull($this->SubscriptionTest->validationErrors['email']);
       }
       
+      function testGroupAssociation() {
+        $subscription = $this->SubscriptionTest->read(null, 1);
+        $this->assertNotNull($subscription['Group']);
+        $this->assertEqual('1', $subscription['Group'][0]['id']);
+      }
 
   }
 ?>
