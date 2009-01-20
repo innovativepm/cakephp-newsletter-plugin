@@ -62,12 +62,14 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->admin_add();
+      
+      $this->assertNotNull($this->Subscriptions->viewVars['groups']);
     
       //assert the record was changed
       $result = $this->Subscriptions->Subscription->read(null, $this->Subscriptions->Subscription->id);
       $this->assertEqual($result['Subscription']['name'], 'Fake Subscription');
       $this->assertEqual($result['Subscription']['email'], 'fake@subscription.com');
-    
+      
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'edit', 'id' => $this->Subscriptions->Subscription->id));
@@ -84,6 +86,8 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->admin_edit();
+      
+      $this->assertNotNull($this->Subscriptions->viewVars['groups']);
     
       //assert the record was changed
       $result = $this->Subscriptions->Subscription->read(null, 1);

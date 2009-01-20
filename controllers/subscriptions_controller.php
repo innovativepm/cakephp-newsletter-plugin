@@ -102,6 +102,7 @@
                 $this->redirect(array('action' => 'edit', 'id' => $this->Subscription->id));
             }
         }
+        $this->set('groups', $this->Group->find('list'));
     }
 
     function admin_edit($id = null) {
@@ -118,6 +119,8 @@
                 $this->Session->setFlash(__('Subscription successfully saved', true));
             }
         }
+        
+        $this->set('groups', $this->Group->find('list'));
     }
 
     function admin_delete($id) {
