@@ -94,7 +94,7 @@
 		  $this->set('subscriptions', $this -> paginate('Subscription', $conditions));
 	  }
 	  
-	  public function admin_add() {
+	  function admin_add() {
         if(!empty($this->data)) {
             $this->Subscription->set($this->data);
             if($this->Subscription->save()) {
@@ -104,7 +104,7 @@
         }
     }
 
-    public function admin_edit($id = null) {
+    function admin_edit($id = null) {
         if(!$id) {
             $this->Session->setFlash(__('Invalid subscription id', true));
             $this->redirect(array('action' => 'index'));
@@ -120,7 +120,7 @@
         }
     }
 
-    public function admin_delete($id) {
+    function admin_delete($id) {
       $this->autoRender = false;
       
       if($this->Subscription->delete($id)) {
@@ -131,7 +131,8 @@
       $this->redirect(array('action' => 'index'));
     }
     
-    public function admin_invert_opt_out($id) {
+    # TODO tratement for if the admin is in a paginate specific page
+    function admin_invert_opt_out($id) {
       $this->Subscription->id = $id;
       $subscribed = $this->Subscription->read();
       
@@ -143,5 +144,74 @@
       $this->Session->setFlash(__('Subscription updated', true));
       $this->redirect(array('action' => 'index'));
     }
+    
+    /*function admin_import_csv() {
+      if (!empty($this->data) && is_uploaded_file($this->data['Subscription']['csv']['tmp_name'])) {
+		    set_time_limit(0);
+		    
+		    $lines = $this->readUploadedCSV($this->data['Subscription']['csv']['tmp_name']);
+			  $errors = array();
+			  $data = array();
+
+			  foreach($lines as $number => $line) {
+				  $error = $this->validateCSVLine($line, ($number+1));
+				  if(count($error)>0) {
+					  $errors = array_merge($errors, $error);
+				  } else {
+				    $line_data = array('Subscription' => array('email' => $line[0], 'name' => $line[1]));
+				    array_push($data, $line_data);
+				    #$this->Subscription->create(array('id' => null, 'Subscription' => array('email' => $line[0], 'name' => $line[1])));
+				    #$this->Subscription->save();
+				  }
+			  }
+			  
+			  $this->Subscription->saveSubscriptionsBatchMode($data);
+			  #debug($data);
+
+			  $this->set('errors', $errors);
+			  $this->Session->setFlash(__('Data imported', true));
+	      $this->redirect(array('action' => 'index'));
+		  } else {
+		    $this->Session->setFlash(__('No data to import', true));
+		    $this->redirect(array('action' => 'index'));
+		  }
+    }*/
+    
+    /**
+	  * Reads a CSV file and returns a list with each line.
+	  * @param $tmp_name The CSV path.
+	  * @return An array with each line.
+	  * @access private
+	  **/
+	  /*function readUploadedCSV($tmp_name) {
+		  $lines = array();
+
+		  ini_set('auto_detect_line_endings',1);
+		  $handle = fopen($tmp_name, "r");
+		  while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+			  array_push($lines,$data);			 
+		  }
+		  return $lines;
+	  }*/
+	  
+	  /**
+	  * Validates a csv line, verifying if it has a valid email.
+	  * @param $list A csv array as returned by _read_uploaded_csv().
+	  * @return Array with errors, if any. False otherwise.
+	  * @access true
+	  **/
+	  /*function validateCSVLine($line, $line_number) {
+		  $errors = array();
+
+		  if(!is_array($line)) {
+			  array_push($errors,'Invalid line');			 
+		  }
+
+		  if($line[0] == null || $line[0] == '') {
+			  array_push($errors, "Error in line $line_number: blank email");
+		  }
+
+		  return $errors;
+	  }*/
   }
 ?>
