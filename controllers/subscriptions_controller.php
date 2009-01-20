@@ -1,7 +1,7 @@
 <?php
   class SubscriptionsController extends NewsletterAppController {
     var $name = 'Subscriptions';
-	  var $uses = array('Newsletter.Subscription');
+	  var $uses = array('Newsletter.Group', 'Newsletter.Subscription');
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
