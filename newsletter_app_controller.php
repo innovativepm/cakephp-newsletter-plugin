@@ -29,5 +29,16 @@ class NewsletterAppController extends AppController {
     return false;
   }
   
+  /**
+  * Send email(s) using parent class AppController sendEmail function.
+  * Make sure your AppController haves this method. See readme.txt for more instructions.
+  * @param
+  * @return
+  * @access
+  **/
+  function sendEmail($subject, $view, $to=null, $from = null, $fromName = null) {
+    return parent::sendEmail($subject, $view, $to, $from, $fromName);
+  }
+  
 }
 ?>

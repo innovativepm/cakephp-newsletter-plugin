@@ -25,7 +25,15 @@
           $this->Subscription->id = $subscribed['Subscription']['id'];
           $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
           
-          #TODO send email
+          $subject = Configure::read('Newsletter.unsubscribe_subject');
+          $from = Configure::read('Newsletter.from'); #Required
+          $from_email = Configure::read('Newsletter.from_email'); #Required
+          if(!$subject) { $subject = 'Unsubscribe Confirmation'; }
+           
+          $subscription = $this->Subscription->read(); 
+          $this->sendEmail($subject, 'unsubscribe', $subscription['Subscription']['email'], $from_email, $from);  
+            
+          
           $this->Session->setFlash(__('The requested email was withdrawn from the mail list', true));
         } else {
           $this->Session->setFlash(__('Email not in subscription list', true));

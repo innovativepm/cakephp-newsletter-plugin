@@ -7,6 +7,7 @@ App::import('Controller', 'Newsletter.Subscriptions');
 class TestSubscriptionsController extends SubscriptionsController {
     var $name = 'Subscriptions';
     var $autoRender = false;
+    var $sentEmail = 0;
  
     function redirect($url, $status = null, $exit = true) {
         $this->redirectUrl = $url;
@@ -14,6 +15,10 @@ class TestSubscriptionsController extends SubscriptionsController {
  
     function render($action = null, $layout = null, $file = null) {
         $this->renderedAction = $action;
+    }
+    
+    function sendEmail($subject, $view, $to=null, $from = null, $fromName = null) {
+      $this->sentEmail = $this->sentEmail+1;
     }
     
     function paginate($object = null, $scope = array(), $whitelist = array()) {
@@ -149,6 +154,9 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $result = $this->Subscriptions->Subscription->read(null, 1);
       $this->assertNotNull($result['Subscription']['opt_out_date']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      
+      #assert email sent
+      $this->assertEqual(1, $this->Subscriptions->sentEmail);
       
       #test for not yet subscribed user
       $this->Subscriptions->data = array('Subscription' => array('email' => 'notfound'));
