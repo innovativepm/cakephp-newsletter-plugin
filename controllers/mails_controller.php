@@ -22,6 +22,11 @@
 		  $this->set('mails', $this -> paginate('Mail'));
 	  }
 	  
+	  function admin_show($id) {
+	    $this->set('mail', $this->Mail->findById($id));
+	    $this->layout = 'clean';
+	  }
+	  
 	  function admin_add() {
         if(!empty($this->data)) {
             $this->Mail->set($this->data);
