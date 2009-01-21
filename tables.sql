@@ -18,7 +18,7 @@ CREATE TABLE  `newsletter_groups` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-CREATE TABLE  `newsletter_subscriptions_groups` (
+CREATE TABLE  `newsletter_groups_subscriptions` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `newsletter_subscription_id` int(10) unsigned NOT NULL,
   `newsletter_group_id` int(11) NOT NULL,

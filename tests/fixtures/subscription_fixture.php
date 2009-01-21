@@ -27,6 +27,14 @@
         'confirmation_code' => null, 
         'created' => '2008-12-03 14:30:00', 
         'modified' => '2008-12-03 14:30:00'),
+        
+        array ('id' => 4, 
+        'name' => 'Subscription in Group 2', 
+        'email' => 'group2@subscription.com',
+        'opt_out_date' => '2008-12-03 14:30:00',
+        'confirmation_code' => null, 
+        'created' => '2008-12-03 14:30:00', 
+        'modified' => '2008-12-03 14:30:00'),
     ); 
  } 
  ?> 

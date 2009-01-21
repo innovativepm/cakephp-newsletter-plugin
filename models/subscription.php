@@ -11,7 +11,7 @@
     var $hasAndBelongsToMany = array(
 				'Group' => array(
 					'className' => 'Group',
-					'joinTable' => 'newsletter_subscriptions_groups',
+					'joinTable' => 'newsletter_groups_subscriptions',
 					'foreignKey' => 'newsletter_subscription_id',
 					'associationForeignKey' => 'newsletter_group_id',
 					'unique' => true,

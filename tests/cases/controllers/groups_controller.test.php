@@ -27,7 +27,7 @@ class TestGroupsController extends GroupsController {
  
 class GroupsControllerTestCase extends CakeTestCase {
 
-    var $fixtures = array('plugin.newsletter.group');
+    var $fixtures = array('plugin.newsletter.groups_subscriptions', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
  
     function startTest() {
       $this->Groups = new TestGroupsController();
@@ -101,6 +101,18 @@ class GroupsControllerTestCase extends CakeTestCase {
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Groups->Session->check('Message.flash.message'));
       $this->assertEqual($this->Groups->redirectUrl, array('action' => 'index'));
+    }
+    
+    function testListSubscriptions() {
+      /*$this->Groups->beforeFilter();
+      $this->Groups->Component->startup($this->Groups);
+      $this->Groups->admin_list_subscriptions(1);
+      
+      $this->assertNotNull($this->Groups->viewVars['subscriptions']);
+      
+      $subscriptions = $this->Groups->viewVars['subscriptions'];
+      //verifies if he got the 3 correctly subscriptions 
+      */
     }
  
     function endTest() {
