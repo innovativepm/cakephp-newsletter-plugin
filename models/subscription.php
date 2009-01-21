@@ -6,11 +6,11 @@
     var $displayField = 'email';
     var $useTable = 'newsletter_subscriptions';
     
-    var $actsAs   = array('extendAssociations');
-    
+    var $actsAs   = array('extendAssociations'); 
+
     var $hasAndBelongsToMany = array(
 				'Group' => array(
-					'className' => 'Group',
+					'className' => 'Newsletter.Group',
 					'joinTable' => 'newsletter_groups_subscriptions',
 					'foreignKey' => 'newsletter_subscription_id',
 					'associationForeignKey' => 'newsletter_group_id',

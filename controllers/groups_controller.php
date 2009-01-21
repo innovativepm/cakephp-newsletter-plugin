@@ -1,7 +1,7 @@
 <?php
   class GroupsController extends NewsletterAppController {
     var $name = 'Groups';
-	  var $uses = array('Newsletter.Group', 'Newsletter.Subscription');
+	  var $uses = array('Newsletter.Group', 'Newsletter.GroupSubscription');
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
@@ -9,7 +9,7 @@
 		    'limit' => 40,
 		    'order' => array('Group.name' => 'asc')
 		  ),
-		  'Subscription' => array(
+		  'GroupSubscription' => array(
 		    'limit' => 40,
 		    'order' => array('Subscription.email' => 'asc')
 		  )
@@ -27,12 +27,9 @@
 	  }
 	  
 	  function admin_list_subscriptions($id) {
-	    $this->Subscription->bindModel(array('hasOne' => array('NewsletterSubscriptionsGroups')));
-	    #$subcriptions = $this->Subscription->find('all', array('fields' => array('Subscription.*'), 'conditions' => array('NewsletterSubscriptionsGroups.newsletter_group_id' => $id)));	    
-	    
-	    $subcriptions = $this->paginate('Subscription', array('NewsletterSubscriptionsGroups.newsletter_group_id' => $id));
-	    
+	    $subcriptions = $this->paginate('GroupSubscription', array('GroupSubscription.newsletter_group_id' => $id));
 	    $this->set('subscriptions', $subcriptions);
+	    $this->set('group', $this->Group->read(null, $id)); 
 	  }
 	  
 	  function admin_add() {

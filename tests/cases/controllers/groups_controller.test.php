@@ -17,7 +17,11 @@ class TestGroupsController extends GroupsController {
     }
     
     function paginate($object = null, $scope = array(), $whitelist = array()) {
-      return $this->Group->find('all', array('conditions' => $scope));
+      if($object == 'Group') {
+        return $this->Group->find('all', array('conditions' => $scope));
+      } elseif ($object == 'GroupSubscription') {
+        return $this->GroupSubscription->find('all', array('conditions' => $scope));
+      }
     }
  
     function _stop($status = 0) {
@@ -104,15 +108,23 @@ class GroupsControllerTestCase extends CakeTestCase {
     }
     
     function testListSubscriptions() {
-      /*$this->Groups->beforeFilter();
+      $this->Groups->beforeFilter();
       $this->Groups->Component->startup($this->Groups);
       $this->Groups->admin_list_subscriptions(1);
       
       $this->assertNotNull($this->Groups->viewVars['subscriptions']);
+      $this->assertNotNull($this->Groups->viewVars['group']);
       
+      //verifies if he got the 3 correctly subscriptions according to the fixtures
       $subscriptions = $this->Groups->viewVars['subscriptions'];
-      //verifies if he got the 3 correctly subscriptions 
-      */
+      $this->assertEqual(3, count($subscriptions));
+      
+      $i = 1;
+      foreach ($subscriptions as $key => $value) {
+        $this->assertEqual($i, $value['Subscription']['id']);
+        $i = $i+1;
+      }
+      
     }
  
     function endTest() {
