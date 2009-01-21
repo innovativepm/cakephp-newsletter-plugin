@@ -66,6 +66,7 @@ class MailsControllerTestCase extends CakeTestCase {
     
       //assert the record was changed
       $result = $this->Mails->Mail->read(null, $this->Mails->Mail->id);
+      $this->assertNotNull($result['Mail']['read_confirmation_code']);
       $this->assertEqual($result['Mail']['from'], 'Fake From');
       $this->assertEqual($result['Mail']['from_email'], 'fake@email.com');
       $this->assertEqual($result['Mail']['subject'], 'Fake Subject');

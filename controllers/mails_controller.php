@@ -37,6 +37,7 @@
 	  
 	  function admin_add() {
         if(!empty($this->data)) {
+            $this->data['Mail']['read_confirmation_code'] = md5(date('Y-m-d H:i:s').$this->data['Mail']['subject']);
             $this->Mail->set($this->data);
             if($this->Mail->save()) {
                 $this->Session->setFlash(__('Mail successfully added', true));
