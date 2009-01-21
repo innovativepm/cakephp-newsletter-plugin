@@ -35,6 +35,14 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->Mails->Component->initialize($this->Mails);
     }
     
+    function testAdminShow() {
+      $this->Mails->beforeFilter();
+      $this->Mails->Component->startup($this->Mails);
+      $this->Mails->admin_show(1);
+      
+      $this->assertNotNull($this->Mails->viewVars['mail']);
+    }
+    
     function testAdminIndex() {
       $this->Mails->beforeFilter();
       $this->Mails->Component->startup($this->Mails);
