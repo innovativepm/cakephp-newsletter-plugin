@@ -37,3 +37,12 @@ CREATE TABLE  `newsletter_mails` (
   `read_confirmation_code` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8
+
+CREATE TABLE  `newsletter_mail_views` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `newsletter_mail_id` int(10) unsigned default NULL,
+  `ip` varchar(100) default NULL,
+  `created` datetime default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `fk` (`newsletter_mail_id`,`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8

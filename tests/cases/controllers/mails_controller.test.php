@@ -27,7 +27,7 @@ class TestMailsController extends MailsController {
  
 class MailsControllerTestCase extends CakeTestCase {
 
-    var $fixtures = array('plugin.newsletter.mail');
+    var $fixtures = array('plugin.newsletter.mail', 'plugin.newsletter.mail_view');
  
     function startTest() {
       $this->Mails = new TestMailsController();
@@ -122,6 +122,16 @@ class MailsControllerTestCase extends CakeTestCase {
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Mails->Session->check('Message.flash.message'));
       $this->assertEqual($this->Mails->redirectUrl, array('action' => 'index'));
+    }
+    
+    function testAdminStatistics() {
+      $this->Mails->beforeFilter();
+      $this->Mails->Component->startup($this->Mails);
+      $this->Mails->admin_statistics(1);
+    
+      $this->assertNotNull($this->Mails->viewVars['mail']);
+      $this->assertNotNull($this->Mails->viewVars['count']);
+      $this->assertNotNull($this->Mails->viewVars['countUnique']);
     }
  
     function endTest() {

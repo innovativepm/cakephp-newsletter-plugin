@@ -1,7 +1,7 @@
 <?php
   class MailsController extends NewsletterAppController {
     var $name = 'Mails';
-	  var $uses = array('Newsletter.Mail');
+	  var $uses = array('Newsletter.Mail', 'Newsletter.MailView');
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
@@ -20,6 +20,14 @@
 	  
 	  function admin_index() {
 		  $this->set('mails', $this -> paginate('Mail'));
+	  }
+	  
+	  function admin_statistics($id) {
+	    $mail = $this->Mail->read(null, $id);
+	    $count = $this->MailView->countViews($id);
+	    $countUnique = $this->MailView->countUniqueViews($id);
+	    
+	    $this->set(compact('mail', 'count', 'countUnique'));
 	  }
 	  
 	  function admin_show($id) {

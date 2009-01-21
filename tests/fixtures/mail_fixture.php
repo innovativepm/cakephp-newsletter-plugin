@@ -12,6 +12,15 @@
         'read_confirmation_code' => '12345', 
         'created' => '2008-12-03 14:30:00', 
         'modified' => '2008-12-03 14:30:00'),
+        
+        array ('id' => 2, 
+        'from' => 'Test From',
+        'from_email' => 'test@from.com',
+        'subject' => 'Another Mail',
+        'content' => 'Welcome!',
+        'read_confirmation_code' => '123456', 
+        'created' => '2008-12-03 14:30:00', 
+        'modified' => '2008-12-03 14:30:00'),
     ); 
  } 
  ?> 
