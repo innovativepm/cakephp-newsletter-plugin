@@ -4,6 +4,9 @@
     <?php echo $limit.__(' per time', true) ?></p>
   </h3>
   <div id="updatable_table">
+    <?php if($rest == 0) { ?>
+      <h2><?php echo __('Sending complete', true) ?></h2>
+    <?php } ?>
     <table cellspacing="0">
       <thead>
         <tr>

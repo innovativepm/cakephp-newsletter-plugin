@@ -149,6 +149,7 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($this->Mails->viewVars['mail']);
       $this->assertNotNull($this->Mails->viewVars['count']);
       $this->assertNotNull($this->Mails->viewVars['countUnique']);
+      $this->assertNotNull($this->Mails->viewVars['rest']);
     }
     
     function testAdminReset() {

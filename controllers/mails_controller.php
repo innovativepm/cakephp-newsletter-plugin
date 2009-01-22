@@ -27,7 +27,12 @@
 	    $count = $this->MailView->countViews($id);
 	    $countUnique = $this->MailView->countUniqueViews($id);
 	    
-	    $this->set(compact('mail', 'count', 'countUnique'));
+	    $groups = $this->extractGroups($mail);
+      $last_sent = $mail['Mail']['last_sent_subscription_id'];
+        
+      $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+	    
+	    $this->set(compact('mail', 'count', 'countUnique', 'rest'));
 	  }
 	  
 	  function admin_show($id) {
