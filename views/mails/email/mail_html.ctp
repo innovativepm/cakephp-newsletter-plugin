@@ -21,5 +21,5 @@ if($message) {
 <?  
 } 
 ?>
-<img src="http://<?php echo $_SERVER['HTTP_HOST'] ?>/newsletter/mail/read/<?php echo $readConfirmationCode ?>"/>
+<img src="http://<?php echo $_SERVER['HTTP_HOST'] ?>/newsletter/mails/read/<?php echo $readConfirmationCode ?>"/>
 
