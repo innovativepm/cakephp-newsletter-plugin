@@ -152,10 +152,20 @@ class MailsControllerTestCase extends CakeTestCase {
     }
     
     function testAdminSend() {
+      Configure::write('Newsletter.sendX', 2);
+      $this->Mails->admin_send(1);
+    
+      #view vars
+      $this->assertEqual(1, $this->Mails->viewVars['sent']);
+      $this->assertEqual(3, $this->Mails->viewVars['rest']);
+      $this->assertEqual(2, $this->Mails->viewVars['limit']);
+    }
+    
+    function testAdminSendMail() {
       
       #Test for mail 1
       Configure::write('Newsletter.sendX', 2);
-      $this->Mails->admin_send(1);
+      $this->Mails->admin_send_mail(1);
       
       $emails = $this->Mails->emails;
       $this->assertEqual(1, count($emails));
@@ -169,15 +179,22 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual('mail', $emails['view']);
       $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
       
-      #assert it has updated the last_sent_subscription_id with the last subscription (3)
+      #assert it has updated the 'last_sent_subscription_id' and 'sent' with the last subscription (3)
       $mail = $this->Mails->Mail->read(null, 1);
       $this->assertEqual(3, $mail['Mail']['last_sent_subscription_id']);
+      $this->assertEqual(3, $mail['Mail']['sent']);
+      
+      #view vars
+      $response = $this->Mails->viewVars['response'];
+      $this->assertEqual(3, $response['sent']);
+      $this->assertEqual(1, $response['rest']);
+      $this->assertEqual(2, $response['limit']);
     }
     
-    function testAdminSend2() {
+    function testAdminSendMail2() {
       #Test for mail 2
       Configure::write('Newsletter.sendX', 2);
-      $this->Mails->admin_send(2);
+      $this->Mails->admin_send_mail(2);
       
       $emails = $this->Mails->emails;
       $this->assertEqual(1, count($emails));
@@ -191,9 +208,16 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual('mail', $emails['view']);
       $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
       
-      #assert it has updated the last_sent_subscription_id with the last subscription (4)
+      #assert it has updated the 'last_sent_subscription_id' and 'sent' with the last subscription (4)
       $mail = $this->Mails->Mail->read(null, 2);
       $this->assertEqual(4, $mail['Mail']['last_sent_subscription_id']);
+      $this->assertEqual(1, $mail['Mail']['sent']);
+      
+      #view vars
+      $response = $this->Mails->viewVars['response'];
+      $this->assertEqual(1, $response['sent']);
+      $this->assertEqual(0, $response['rest']);
+      $this->assertEqual(2, $response['limit']);
     }
     
     function testExtractGroups() {

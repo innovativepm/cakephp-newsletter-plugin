@@ -12,6 +12,7 @@
                 <th><?php echo $paginator->sort(__( 'Subject', true), 'name'); ?></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th><?php echo $paginator->sort(__( 'Created on', true), 'created'); ?></th>
 	              <th><?php echo $paginator->sort(__( 'Modified on', true), 'modified'); ?></th>
                 <th></th>
@@ -23,6 +24,7 @@
             <tr<?php echo is_int($i / 2) ? ' class="alt"' : ''; ?>>
                 <td><?php echo $html->link($mail['Mail']['subject'], array('action' => 'edit', 'admin' => true, $mail['Mail']['id'])); ?></td>
                 <td><?php echo $html->link(__('show', true), array('action' => 'show', 'admin' => true, $mail['Mail']['id']), array('target' => '_blank')); ?></td>
+                <td><?php echo $html->link(__('send', true), array('action' => 'send', 'admin' => true, $mail['Mail']['id'])); ?></td>
                 <td><?php echo $html->link(__('statistics', true), array('action' => 'statistics', 'admin' => true, $mail['Mail']['id'])); ?></td>
                 <td><?php echo $time->niceShort($mail['Mail']['created']); ?></td>
 	              <td><?php echo $time->niceShort($mail['Mail']['modified']); ?></td>

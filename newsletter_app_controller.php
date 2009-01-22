@@ -1,6 +1,8 @@
 <?php
 class NewsletterAppController extends AppController {
 
+  var $components = array('RequestHandler');
+
   /**
   * Verifies if $str exists into $array. If $array is null, it's value
   * is assumed as $this->data.

@@ -34,6 +34,7 @@ CREATE TABLE  `newsletter_mails` (
   `content` text,
   `read_confirmation_code` varchar(100) default NULL,
   `last_sent_subscription_id` int(10) unsigned NOT NULL,
+  `sent` int(10) unsigned NOT NULL,
   `created` datetime default NULL,
   `modified` datetime default NULL,
   PRIMARY KEY  (`id`)
