@@ -97,6 +97,53 @@
         $this->assertEqual('2', $mail['Group'][1]['id']);
         $this->assertFalse(array_key_exists(2, $mail['Group']));
       }
+      
+      function testExtractGroups() {
+        $data = array('Group' => array(
+            0 => array('id' => 5  ),
+            1 => array('id' => 10),
+            2 => array('id' => 15)
+          )
+        );
+        
+        $result = $this->MailTest->extractGroups($data);
+        $expected = array(5, 10, 15);
+        $this->assertEqual($expected, $result);
+        
+        #test empty
+        $data = array('Group' => array());
+        
+        $result = $this->MailTest->extractGroups($data);
+        $expected = array();
+        $this->assertEqual($expected, $result);
+      }
+      
+      function testBeforeValidateDontChanges() {
+        #if groups has changed, reset the 'sent' and 'last_sent_subscription_id' fields
+        $mail = $this->MailTest->read(null, 1);
+        $this->MailTest->set($mail);
+        $this->MailTest->save();
+
+        #assert that they have not changed
+        $mail = $this->MailTest->read(null, 1);
+        $this->assertEqual(1, $mail['Mail']['sent']);
+        $this->assertEqual(1, $mail['Mail']['last_sent_subscription_id']);
+      }
+      
+      function testBeforeValidateChanges() {
+        #if groups has changed, reset the 'sent' and 'last_sent_subscription_id' fields
+        $mail = $this->MailTest->read(null, 1);
+        $mail['Group']['Group'] = array(100);
+
+        $this->MailTest->set($mail);
+        $this->MailTest->save();
+        
+        #assert that they have changed
+        $mail = $this->MailTest->read(null, 1);
+        $this->assertEqual(0, $mail['Mail']['sent']);
+        $this->assertEqual(0, $mail['Mail']['last_sent_subscription_id']);
+      }
+
 
   }
 ?>
