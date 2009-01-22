@@ -3,7 +3,7 @@
 
   class MailViewCase extends CakeTestCase {
 
-      var $fixtures = array('plugin.newsletter.mail', 'plugin.newsletter.mail_view');
+      var $fixtures = array('plugin.newsletter.mail_view', 'plugin.newsletter.mail', 'plugin.newsletter.groups_mails', 'plugin.newsletter.groups_subscriptions', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
       var $MailViewTest;
       
       function start() {
