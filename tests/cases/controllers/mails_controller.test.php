@@ -7,6 +7,7 @@ App::import('Controller', 'Newsletter.Mails');
 class TestMailsController extends MailsController {
     var $name = 'Mails';
     var $autoRender = false;
+    var $emails = array();
  
     function redirect($url, $status = null, $exit = true) {
         $this->redirectUrl = $url;
@@ -18,6 +19,17 @@ class TestMailsController extends MailsController {
     
     function paginate($object = null, $scope = array(), $whitelist = array()) {
       return $this->Mail->find('all', array('conditions' => $scope));
+    }
+    
+    #mock: for each email call, add an entry to the $this->emails list.
+    function sendEmail($subject, $view, $to=null, $from = null, $fromName = null) {
+      array_push($this->emails, array(
+        'subject' => $subject,
+        'view' => $view,
+        'to' => $to,
+        'from_email' => $from,
+        'from' => $fromName,
+      ));
     }
  
     function _stop($status = 0) {
@@ -137,6 +149,93 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($this->Mails->viewVars['mail']);
       $this->assertNotNull($this->Mails->viewVars['count']);
       $this->assertNotNull($this->Mails->viewVars['countUnique']);
+    }
+    
+    function testAdminSend() {
+      
+      #Test for mail 1
+      Configure::write('Newsletter.sendX', 2);
+      $this->Mails->admin_send(1);
+      
+      $emails = $this->Mails->emails;
+      $this->assertEqual(1, count($emails));
+      
+      $emails = $emails[0];
+      
+      #expects two emails to be sent to the following subscribeds      
+      $expected = array('someone@waiting.com' => 'Waiting Confirmation', 'opt@out.com' => 'Opt Out');
+      $this->assertEqual($expected, $emails['to']);
+      $this->assertEqual('My Mail', $emails['subject']);
+      $this->assertEqual('mail', $emails['view']);
+      $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
+      
+      #assert it has updated the last_sent_subscription_id with the last subscription (3)
+      $mail = $this->Mails->Mail->read(null, 1);
+      $this->assertEqual(3, $mail['Mail']['last_sent_subscription_id']);
+    }
+    
+    function testAdminSend2() {
+      #Test for mail 2
+      Configure::write('Newsletter.sendX', 2);
+      $this->Mails->admin_send(2);
+      
+      $emails = $this->Mails->emails;
+      $this->assertEqual(1, count($emails));
+      
+      $emails = $emails[0];
+      
+      #expects one email to be sent to the following subscribed      
+      $expected = array('group2@subscription.com' => 'Subscription in Group 2');
+      $this->assertEqual($expected, $emails['to']);
+      $this->assertEqual('Another Mail', $emails['subject']);
+      $this->assertEqual('mail', $emails['view']);
+      $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
+      
+      #assert it has updated the last_sent_subscription_id with the last subscription (4)
+      $mail = $this->Mails->Mail->read(null, 2);
+      $this->assertEqual(4, $mail['Mail']['last_sent_subscription_id']);
+    }
+    
+    function testExtractGroups() {
+      $data = array('Group' => array(
+          0 => array('id' => 5  ),
+          1 => array('id' => 10),
+          2 => array('id' => 15)
+        )
+      );
+      
+      $result = $this->Mails->extractGroups($data);
+      $expected = array(5, 10, 15);
+      $this->assertEqual($expected, $result);
+      
+      #test empty
+      $data = array('Group' => array());
+      
+      $result = $this->Mails->extractGroups($data);
+      $expected = array();
+      $this->assertEqual($expected, $result);
+    }
+    
+    function testExtractEmailAndName() {
+      $data = array();
+      array_push($data, array(
+        'Subscription' => array('email' => 'email1', 'name' => 'name1')
+      ));
+      array_push($data, array(
+        'Subscription' => array('email' => 'email2', 'name' => 'name2')
+      ));
+      
+      $result = $this->Mails->extractEmailAndName($data);
+      $this->assertEqual('name1', $result['email1']);
+      $this->assertEqual('name2', $result['email2']);
+      
+      #test empty
+      $data = array();
+      
+      $result = $this->Mails->extractEmailAndName($data);
+      $expected = array();
+      $this->assertEqual($expected, $result);
+      
     }
  
     function endTest() {

@@ -17,6 +17,7 @@ class TestSubscriptionsController extends SubscriptionsController {
         $this->renderedAction = $action;
     }
     
+    #mock
     function sendEmail($subject, $view, $to=null, $from = null, $fromName = null) {
       $this->sentEmail = $this->sentEmail+1;
     }

@@ -32,11 +32,12 @@ CREATE TABLE  `newsletter_mails` (
   `from_email` varchar(100) default NULL,
   `subject` varchar(100) default NULL,
   `content` text,
+  `read_confirmation_code` varchar(100) default NULL,
+  `last_sent_subscription_id` int(10) unsigned NOT NULL,
   `created` datetime default NULL,
   `modified` datetime default NULL,
-  `read_confirmation_code` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8
 
 CREATE TABLE  `newsletter_mail_views` (
   `id` int(10) unsigned NOT NULL auto_increment,

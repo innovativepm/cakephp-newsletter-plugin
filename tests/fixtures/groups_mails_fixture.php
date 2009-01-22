@@ -13,7 +13,7 @@
         'newsletter_mail_id' => '1'
         ),
         array ('id' => '3',
-        'newsletter_group_id' => '1',
+        'newsletter_group_id' => '2',
         'newsletter_mail_id' => '2'
         ),
     ); 

@@ -1,7 +1,7 @@
 <?php
   class MailsController extends NewsletterAppController {
     var $name = 'Mails';
-	  var $uses = array('Newsletter.Mail', 'Newsletter.MailView', 'Newsletter.Group');
+	  var $uses = array('Newsletter.Mail', 'Newsletter.MailView', 'Newsletter.Group', 'Newsletter.GroupSubscription');
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
@@ -73,6 +73,59 @@
           $this->Session->setFlash(__('Deleting failed', true));
       }
       $this->redirect(array('action' => 'index'));
+    }
+    
+    /**
+    * This action sends the next x emails for this mail.
+    * @param $mail_id The Mail id. 
+    **/
+    function admin_send($mail_id) {
+      $mail = $this->Mail->read(null, $mail_id);
+      $groups = $this->extractGroups($mail);
+      
+      #find next subscriptions to send email
+      
+      #unbind for performance gain
+      $this->GroupSubscription->unbindModel(array('belongsTo' => array('Group')));
+      
+      $last_sent = $mail['Mail']['last_sent_subscription_id']; #the last subscription_id that already received this mail
+      $limit = Configure::read('Newsletter.sendX'); #the number of emails to send
+      if(!$limit) {$limit = 10;} #sets default value
+      
+      $subscriptions = $this->GroupSubscription->find('all', array('fields' => array('Subscription.id', 'Subscription.email', 'Subscription.name'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created', 'limit' => $limit));
+      
+      if(!empty($subscriptions)) {      
+        $this->set('content', $mail['Mail']['content']);
+        $this->sendEmail($mail['Mail']['subject'], 'mail', $this->extractEmailAndName($subscriptions), $mail['Mail']['from_email'], $mail['Mail']['from']);
+        
+        #updated last_sent_subscription_id
+        $last_element = end($subscriptions);
+        $mail['Mail']['last_sent_subscription_id'] = $last_element['Subscription']['id'];
+        $this->Mail->create($mail);
+        $this->Mail->save();
+      }
+    }
+    
+    function extractGroups($data) {
+      $groups = array();
+      
+      if(!empty($data) && array_key_exists('Group', $data)) { 
+        foreach ($data['Group'] as $key => $group) {
+          array_push($groups, $group['id']);
+        }
+      }
+      return $groups;
+    }
+    
+    function extractEmailAndName($data) {
+      $list = array();
+      
+      if(!empty($data)) { 
+        foreach ($data as $key => $subscription) {
+          $list[$subscription['Subscription']['email']] = $subscription['Subscription']['name'];
+        }
+      }
+      return $list;
     }
     
   }

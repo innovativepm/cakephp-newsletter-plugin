@@ -9,7 +9,8 @@
         'from_email' => 'test@from.com',
         'subject' => 'My Mail',
         'content' => 'Welcome!',
-        'read_confirmation_code' => '12345', 
+        'read_confirmation_code' => '12345',
+        'last_sent_subscription_id' => '1', 
         'created' => '2008-12-03 14:30:00', 
         'modified' => '2008-12-03 14:30:00'),
         
@@ -19,8 +20,9 @@
         'subject' => 'Another Mail',
         'content' => 'Welcome!',
         'read_confirmation_code' => '123456', 
-        'created' => '2008-12-03 14:30:00', 
-        'modified' => '2008-12-03 14:30:00'),
+        'last_sent_subscription_id' => null, 
+        'created' => '2008-12-03 14:31:00', 
+        'modified' => '2008-12-03 14:31:00'),
     ); 
  } 
  ?> 
