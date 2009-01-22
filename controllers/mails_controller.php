@@ -135,6 +135,7 @@
       $this->layout = 'clean';
     
       $mail = $this->Mail->read(null, $mail_id);
+      $sent = $mail['Mail']['sent'];
       $groups = $this->extractGroups($mail);
       
       #find next subscriptions to send email
