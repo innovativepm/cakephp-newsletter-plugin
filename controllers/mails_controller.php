@@ -75,6 +75,17 @@
       $this->redirect(array('action' => 'index'));
     }
     
+    function admin_reset($mail_id) {
+      $mail = $this->Mail->read(null, $mail_id);
+      $mail['Mail']['sent'] = 0;
+      $mail['Mail']['last_sent_subscription_id'] = null;
+      $this->Mail->set($mail);
+      $this->Mail->save();
+      
+      $this->Session->setFlash(__('Mail reseted', true));
+      $this->redirect(array('action' => 'index'));
+    }
+    
     function admin_send($mail_id) {
       $mail = $this->Mail->read(null, $mail_id);
       $groups = $this->extractGroups($mail);
@@ -83,10 +94,15 @@
       $limit = Configure::read('Newsletter.sendX'); #the number of emails to send
       if(!$limit) {$limit = 10;} #sets default value
         
+      $interval = Configure::read('Newsletter.sendInterval'); #the interval time before send next batch
+      if(!$interval) {$interval = 10;} #sets default value
+        
       $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
        
+      $this->set('mail', $mail);   
       $this->set('sent', $mail['Mail']['sent']);  
       $this->set('limit', $limit);
+      $this->set('interval', $interval);
       $this->set('rest', $rest);
     }
     
@@ -95,8 +111,7 @@
     * @param $mail_id The Mail id. 
     **/
     function admin_send_mail($mail_id) {
-      $this->layout = 'json';
-      $this->RequestHandler->setContent('json', 'text/x-json');
+      $this->layout = 'clean';
     
       $mail = $this->Mail->read(null, $mail_id);
       $groups = $this->extractGroups($mail);
@@ -127,8 +142,9 @@
       
       $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
       
-      $response = array('sent' => $mail['Mail']['sent'], 'limit' => $limit, 'rest' => $rest);
-      $this->set('response', $response);  
+      $this->set('sent', $mail['Mail']['sent']);  
+      $this->set('limit', $limit);
+      $this->set('rest', $rest); 
     }
     
     function extractGroups($data) {

@@ -151,14 +151,29 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($this->Mails->viewVars['countUnique']);
     }
     
+    function testAdminReset() {
+      $this->Mails->admin_reset(1);
+      
+      $mail = $this->Mails->Mail->read(null, 1);
+      $this->assertEqual(0, $mail['Mail']['sent']);
+      $this->assertEqual(0, $mail['Mail']['last_sent_subscription_id']);
+      
+      //assert that some sort of session flash was set.
+      $this->assertTrue($this->Mails->Session->check('Message.flash.message'));
+      $this->assertEqual($this->Mails->redirectUrl, array('action' => 'index'));
+    }
+    
     function testAdminSend() {
       Configure::write('Newsletter.sendX', 2);
+      Configure::write('Newsletter.sendInterval', 10);
       $this->Mails->admin_send(1);
     
       #view vars
+      $this->assertNotNull($this->Mails->viewVars['mail']);
       $this->assertEqual(1, $this->Mails->viewVars['sent']);
       $this->assertEqual(3, $this->Mails->viewVars['rest']);
       $this->assertEqual(2, $this->Mails->viewVars['limit']);
+      $this->assertEqual(10, $this->Mails->viewVars['interval']);
     }
     
     function testAdminSendMail() {
@@ -185,10 +200,9 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual(3, $mail['Mail']['sent']);
       
       #view vars
-      $response = $this->Mails->viewVars['response'];
-      $this->assertEqual(3, $response['sent']);
-      $this->assertEqual(1, $response['rest']);
-      $this->assertEqual(2, $response['limit']);
+      $this->assertEqual(3, $this->Mails->viewVars['sent']);
+      $this->assertEqual(1, $this->Mails->viewVars['rest']);
+      $this->assertEqual(2, $this->Mails->viewVars['limit']);
     }
     
     function testAdminSendMail2() {
@@ -214,10 +228,9 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual(1, $mail['Mail']['sent']);
       
       #view vars
-      $response = $this->Mails->viewVars['response'];
-      $this->assertEqual(1, $response['sent']);
-      $this->assertEqual(0, $response['rest']);
-      $this->assertEqual(2, $response['limit']);
+      $this->assertEqual(1, $this->Mails->viewVars['sent']);
+      $this->assertEqual(0, $this->Mails->viewVars['rest']);
+      $this->assertEqual(2, $this->Mails->viewVars['limit']);
     }
     
     function testExtractGroups() {
