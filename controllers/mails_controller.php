@@ -82,10 +82,10 @@
     
     function admin_reset($mail_id) {
       $mail = $this->Mail->read(null, $mail_id);
-      $mail['Mail']['sent'] = 0;
-      $mail['Mail']['last_sent_subscription_id'] = null;
-      $this->Mail->set($mail);
-      $this->Mail->save();
+      
+      $this->Mail->id = $mail['Mail']['id'];
+      $this->Mail->saveField('last_sent_subscription_id', null);
+      $this->Mail->saveField('sent', 0);
       
       $this->Session->setFlash(__('Mail reseted', true));
       $this->redirect(array('action' => 'index'));
@@ -139,15 +139,16 @@
         #updated 'last_sent_subscription_id' and 'sent'
         $last_element = end($subscriptions);
         $last_sent = $last_element['Subscription']['id'];
-        $mail['Mail']['last_sent_subscription_id'] = $last_sent;
-        $mail['Mail']['sent'] = ($mail['Mail']['sent'] + count($subscriptions));
-        $this->Mail->create($mail);
-        $this->Mail->save();
+        $sent = ($mail['Mail']['sent'] + count($subscriptions));
+
+        $this->Mail->id = $mail['Mail']['id'];
+        $this->Mail->saveField('last_sent_subscription_id', $last_sent);
+        $this->Mail->saveField('sent', $sent);
       }
       
       $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
       
-      $this->set('sent', $mail['Mail']['sent']);  
+      $this->set('sent', $sent);  
       $this->set('limit', $limit);
       $this->set('rest', $rest); 
     }

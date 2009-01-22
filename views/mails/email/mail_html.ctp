@@ -12,7 +12,7 @@ if($message) {
     <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/newsletter/subscriptions/unsubscribe/">click here</a>.</p>
   </div>
   <style type="text/css">
-    div#rodape{
+    div#footer{
 	    font-size:10px;
 	    margin-top:15px;
 	    line-height:normal
