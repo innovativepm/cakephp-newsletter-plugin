@@ -3,7 +3,7 @@
 
   class MailCase extends CakeTestCase {
 
-      var $fixtures = array('plugin.newsletter.mail');
+      var $fixtures = array('plugin.newsletter.mail', 'plugin.newsletter.groups_mails', 'plugin.newsletter.groups_subscriptions', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
       var $MailTest;
       
       function start() {
@@ -71,6 +71,31 @@
         $this->MailTest->set($data);
         $this->MailTest->validates();
         $this->assertFalse(array_key_exists('subject',$this->MailTest->validationErrors));
+      }
+      
+      function testGroupAssociation() {
+        $mail = $this->MailTest->read(null, 1);
+        $this->assertNotNull($mail['Group']);
+        $this->assertEqual('1', $mail['Group'][0]['id']);
+        $this->assertEqual('2', $mail['Group'][1]['id']);
+      }
+      
+      function testHABTMBehaviour() {
+        $this->MailTest->habtmAdd('Group', 1, 3);
+        
+        $mail = $this->MailTest->read(null, 1);
+        $this->assertNotNull($mail['Group']);
+        $this->assertEqual('2', $mail['Group'][0]['id']);
+        $this->assertEqual('1', $mail['Group'][1]['id']);
+        $this->assertEqual('3', $mail['Group'][2]['id']);
+        
+        $this->MailTest->habtmDelete('Group', 1, 3);
+        
+        $mail = $this->MailTest->read(null, 1);
+        $this->assertNotNull($mail['Group']);
+        $this->assertEqual('1', $mail['Group'][0]['id']);
+        $this->assertEqual('2', $mail['Group'][1]['id']);
+        $this->assertFalse(array_key_exists(2, $mail['Group']));
       }
 
   }

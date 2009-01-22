@@ -5,7 +5,19 @@
     var $primaryKey = 'id';
     var $displayField = 'name';
     var $useTable = 'newsletter_mails';
+  
+    var $actsAs   = array('extendAssociations'); 
 
+    var $hasAndBelongsToMany = array(
+				'Group' => array(
+					'className' => 'Newsletter.Group',
+					'joinTable' => 'newsletter_groups_mails',
+					'foreignKey' => 'newsletter_mail_id',
+					'associationForeignKey' => 'newsletter_group_id',
+					'unique' => true,
+				)
+		);
+  
 		var $validate = array(
 			'from' => array( 
 					'notEmpty' => array(

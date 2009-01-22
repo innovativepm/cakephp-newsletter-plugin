@@ -1,7 +1,7 @@
 <?php
   class MailsController extends NewsletterAppController {
     var $name = 'Mails';
-	  var $uses = array('Newsletter.Mail', 'Newsletter.MailView');
+	  var $uses = array('Newsletter.Mail', 'Newsletter.MailView', 'Newsletter.Group');
 	  var $helpers = array('Time');
 	  
 	  var $paginate = array(
@@ -44,6 +44,7 @@
                 $this->redirect(array('action' => 'edit', 'id' => $this->Mail->id));
             }
         }
+        $this->set('groups', $this->Group->find('list'));
     }
 
     function admin_edit($id = null) {
@@ -60,6 +61,7 @@
                 $this->Session->setFlash(__('Mail successfully saved', true));
             }
         }
+        $this->set('groups', $this->Group->find('list'));
     }
 
     function admin_delete($id) {

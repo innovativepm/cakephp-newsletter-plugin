@@ -27,7 +27,7 @@ class TestMailsController extends MailsController {
  
 class MailsControllerTestCase extends CakeTestCase {
 
-    var $fixtures = array('plugin.newsletter.mail', 'plugin.newsletter.mail_view');
+    var $fixtures = array('plugin.newsletter.mail', 'plugin.newsletter.mail_view', 'plugin.newsletter.groups_mails', 'plugin.newsletter.groups_subscriptions', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
  
     function startTest() {
       $this->Mails = new TestMailsController();
@@ -75,6 +75,8 @@ class MailsControllerTestCase extends CakeTestCase {
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Mails->Session->check('Message.flash.message'));
       $this->assertEqual($this->Mails->redirectUrl, array('action' => 'edit', 'id' => $this->Mails->Mail->id));
+      
+      $this->assertNotNull($this->Mails->viewVars['groups']);
     }
     
     function testAdminEdit() {
@@ -109,6 +111,8 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->Mails->admin_edit(1);
       
       $this->assertNotNull($this->Mails->data);
+      
+      $this->assertNotNull($this->Mails->viewVars['groups']);
     }
     
     function testAdminDelete() {

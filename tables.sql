@@ -46,3 +46,11 @@ CREATE TABLE  `newsletter_mail_views` (
   PRIMARY KEY  (`id`),
   KEY `fk` (`newsletter_mail_id`,`ip`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+CREATE TABLE  `newsletter_groups_mails` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `newsletter_mail_id` int(10) unsigned NOT NULL,
+  `newsletter_group_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `fk` (`newsletter_mail_id`,`newsletter_group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8

@@ -13,6 +13,11 @@
         'name' => 'Secondary Group', 
         'created' => '2008-12-03 14:30:00', 
         'modified' => '2008-12-03 14:30:00'), 
+        
+        array ('id' => 3, 
+        'name' => 'Third Group Whithout Mail', 
+        'created' => '2008-12-03 14:30:00', 
+        'modified' => '2008-12-03 14:30:00'),
     ); 
  } 
  ?> 
