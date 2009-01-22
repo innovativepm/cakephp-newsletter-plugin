@@ -50,7 +50,7 @@
 		
 		function beforeValidate() {
 		  #if groups has changed, reset the 'sent' and 'last_sent_subscription_id' fields
-      if(array_key_exists('id', $this->data['Mail']) && array_key_exists('Group', $this->data['Group'])) {
+      if(array_key_exists('id', $this->data['Mail']) && array_key_exists('Group', $this->data) && array_key_exists('Group', $this->data['Group'])) {
         $current = $this->data;
 		    $mail = $this->read(null, $current['Mail']['id']);
 		    $this->set($current);

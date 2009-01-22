@@ -13,3 +13,5 @@ $from_email = Configure::read('Newsletter.from_email'); #Required
 $subject = Configure::read('Newsletter.sendX'); #Number of emails to sent at each admin_send call.
 $subject = Configure::read('Newsletter.sendInterval'); #the interval time before send next batch
 $subject = Configure::read('Newsletter.mail_opt_out_message');
+$subject = Configure::read('Newsletter.emptyImagePath');
+

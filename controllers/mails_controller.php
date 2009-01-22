@@ -13,7 +13,21 @@
 	  
 	 function beforeFilter() {
       parent::beforeFilter();
-      #$this->Auth->allow('');
+      $this->Auth->allow('read');
+    }
+    
+    #Public
+    function read($id) {
+      $mail = $this->Mail->find('first', array('conditions' => array('read_confirmation_code' => $id)));
+      if($mail) {
+        $data = array('MailView' => array(
+          'newsletter_mail_id' => $mail['Mail']['id'],
+          'ip' => $this->RequestHandler->getClientIP(),
+        ));
+        $this->MailView->set($data);
+        $this->MailView->save();
+      }
+      $this->redirect(Configure::read('Newsletter.emptyImagePath'));
     }
     
     #Admin
@@ -136,6 +150,7 @@
       
       if(!empty($subscriptions)) {      
         $this->set('content', $mail['Mail']['content']);
+        $this->set('readConfirmationCode', $mail['Mail']['read_confirmation_code']);
         $this->sendEmail($mail['Mail']['subject'], 'mail', $this->extractEmailAndName($subscriptions), $mail['Mail']['from_email'], $mail['Mail']['from']);
         
         #updated 'last_sent_subscription_id' and 'sent'

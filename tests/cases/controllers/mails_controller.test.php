@@ -47,6 +47,15 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->Mails->Component->initialize($this->Mails);
     }
     
+    function testRead() {
+      Configure::write('Newsletter.emptyImagePath', 'test');
+      $this->Mails->read('12345');
+      $this->assertEqual('test', $this->Mails->redirectUrl);
+      
+      $count = $this->Mails->MailView->find('count', array('conditions' => array('newsletter_mail_id' => 1)));
+      $this->assertEqual(5, $count);
+    }
+    
     function testAdminShow() {
       $this->Mails->beforeFilter();
       $this->Mails->Component->startup($this->Mails);
@@ -194,6 +203,7 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual('My Mail', $emails['subject']);
       $this->assertEqual('mail', $emails['view']);
       $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
+      $this->assertEqual('12345', $this->Mails->viewVars['readConfirmationCode']);
       
       #assert it has updated the 'last_sent_subscription_id' and 'sent' with the last subscription (3)
       $mail = $this->Mails->Mail->read(null, 1);
@@ -222,6 +232,7 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual('Another Mail', $emails['subject']);
       $this->assertEqual('mail', $emails['view']);
       $this->assertEqual('Welcome!', $this->Mails->viewVars['content']);
+      $this->assertEqual('123456', $this->Mails->viewVars['readConfirmationCode']);
       
       #assert it has updated the 'last_sent_subscription_id' and 'sent' with the last subscription (4)
       $mail = $this->Mails->Mail->read(null, 2);
@@ -273,9 +284,8 @@ class MailsControllerTestCase extends CakeTestCase {
       $result = $this->Mails->extractEmailAndName($data);
       $expected = array();
       $this->assertEqual($expected, $result);
-      
     }
- 
+
     function endTest() {
       $this->Mails->Session->destroy();
       unset($this->Mails);
