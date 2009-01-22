@@ -30,7 +30,8 @@
 	    $groups = $this->extractGroups($mail);
       $last_sent = $mail['Mail']['last_sent_subscription_id'];
         
-      $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+      $rest = $this->GroupSubscription->find('all', array('fields' => array('COUNT(DISTINCT Subscription.id) as count'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+      $rest = $rest[0][0]['count'];
 	    
 	    $this->set(compact('mail', 'count', 'countUnique', 'rest'));
 	  }
@@ -102,7 +103,8 @@
       $interval = Configure::read('Newsletter.sendInterval'); #the interval time before send next batch
       if(!$interval) {$interval = 10;} #sets default value
         
-      $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+      $rest = $this->GroupSubscription->find('all', array('fields' => array('COUNT(DISTINCT Subscription.id) as count'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+      $rest = $rest[0][0]['count'];
        
       $this->set('mail', $mail);   
       $this->set('sent', $mail['Mail']['sent']);  
@@ -130,7 +132,7 @@
       $limit = Configure::read('Newsletter.sendX'); #the number of emails to send
       if(!$limit) {$limit = 10;} #sets default value
       
-      $subscriptions = $this->GroupSubscription->find('all', array('fields' => array('Subscription.id', 'Subscription.email', 'Subscription.name'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created', 'limit' => $limit));
+      $subscriptions = $this->GroupSubscription->find('all', array('fields' => array('DISTINCT Subscription.id, Subscription.email, Subscription.name'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created', 'limit' => $limit));
       
       if(!empty($subscriptions)) {      
         $this->set('content', $mail['Mail']['content']);

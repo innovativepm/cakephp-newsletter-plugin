@@ -7,7 +7,7 @@ if($message) {
 } else {
 ?>
   <div id="footer">
-    <p>You are receiving this email because of you are into our mail list.</p>
+    <p>You are receiving this email because you are into our mail list.</p>
     <p>If you don't want to receive our messages, please
     <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/newsletter/subscriptions/unsubscribe/">click here</a>.</p>
   </div>
