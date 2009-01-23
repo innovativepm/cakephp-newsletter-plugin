@@ -23,7 +23,7 @@
         array ('id' => 3, 
         'name' => 'Opt Out', 
         'email' => 'opt@out.com',
-        'opt_out_date' => '2008-12-03 14:30:00',
+        'opt_out_date' => '2008-12-03 14:32:00',
         'confirmation_code' => null, 
         'created' => '2008-12-03 14:32:00', 
         'modified' => '2008-12-03 14:32:00'),
@@ -31,7 +31,7 @@
         array ('id' => 4, 
         'name' => 'Subscription in Group 2', 
         'email' => 'group2@subscription.com',
-        'opt_out_date' => '2008-12-03 14:30:00',
+        'opt_out_date' => null,
         'confirmation_code' => null, 
         'created' => '2008-12-03 14:33:00', 
         'modified' => '2008-12-03 14:33:00'),
@@ -43,6 +43,14 @@
         'confirmation_code' => null, 
         'created' => '2008-12-03 14:34:00', 
         'modified' => '2008-12-03 14:34:00'),
+        
+        array ('id' => 6, 
+        'name' => 'Other Person', 
+        'email' => 'other@person.com',
+        'opt_out_date' => null,
+        'confirmation_code' => null, 
+        'created' => '2008-12-03 14:35:00', 
+        'modified' => '2008-12-03 14:35:00'),
     ); 
  } 
  ?> 

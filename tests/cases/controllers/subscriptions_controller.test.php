@@ -137,13 +137,13 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
-      $this->Subscriptions->admin_invert_opt_out(3);
+      $this->Subscriptions->admin_invert_opt_out(5);
       
       $this->assertNotNull($this->Subscriptions->viewVars['subscription']);
       $this->assertEqual('clean', $this->Subscriptions->layout);
       
       //assert the record was changed
-      $result = $this->Subscriptions->Subscription->read(null, 3); //already in opt_out
+      $result = $this->Subscriptions->Subscription->read(null, 5); //already in opt_out
       $this->assertNull($result['Subscription']['opt_out_date']);
     }
     
@@ -209,16 +209,16 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertEqual($site_group, $result['Group'][0]['id']);
       
       #test for existing subscription currently in opt_out
-      $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'opt@out.com'));
+      $this->Subscriptions->data = array('Subscription' => array('name' => 'New Name', 'email' => 'group3@subscription.com'));
       
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->subscribe();
       
-      $result = $this->Subscriptions->Subscription->read(null, 3);
+      $result = $this->Subscriptions->Subscription->read(null, 5);
       $this->assertNotNull($result);
       $this->assertEqual($result['Subscription']['name'], 'New Name');
-      $this->assertEqual($result['Subscription']['email'], 'opt@out.com');
+      $this->assertEqual($result['Subscription']['email'], 'group3@subscription.com');
       $this->assertNotNull($result['Subscription']['confirmation_code']);
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       

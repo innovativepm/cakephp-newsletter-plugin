@@ -198,7 +198,7 @@ class MailsControllerTestCase extends CakeTestCase {
       $emails = $emails[0];
       
       #expects two emails to be sent to the following subscribeds      
-      $expected = array('someone@waiting.com' => 'Waiting Confirmation', 'opt@out.com' => 'Opt Out');
+      $expected = array('someone@waiting.com' => 'Waiting Confirmation', 'group2@subscription.com' => 'Subscription in Group 2');
       $this->assertEqual($expected, $emails['to']);
       $this->assertEqual('My Mail', $emails['subject']);
       $this->assertEqual('mail', $emails['view']);
@@ -207,7 +207,7 @@ class MailsControllerTestCase extends CakeTestCase {
       
       #assert it has updated the 'last_sent_subscription_id' and 'sent' with the last subscription (3)
       $mail = $this->Mails->Mail->read(null, 1);
-      $this->assertEqual(3, $mail['Mail']['last_sent_subscription_id']);
+      $this->assertEqual(4, $mail['Mail']['last_sent_subscription_id']);
       $this->assertEqual(3, $mail['Mail']['sent']);
       
       #view vars

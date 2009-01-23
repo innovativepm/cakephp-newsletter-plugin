@@ -117,13 +117,12 @@ class GroupsControllerTestCase extends CakeTestCase {
       
       //verifies if he got the 3 correctly subscriptions according to the fixtures
       $subscriptions = $this->Groups->viewVars['subscriptions'];
-      $this->assertEqual(3, count($subscriptions));
+      $this->assertEqual(4, count($subscriptions));
       
-      $i = 1;
-      foreach ($subscriptions as $key => $value) {
-        $this->assertEqual($i, $value['Subscription']['id']);
-        $i = $i+1;
-      }
+      $this->assertEqual(1, $subscriptions[0]['Subscription']['id']);
+      $this->assertEqual(2, $subscriptions[1]['Subscription']['id']);
+      $this->assertEqual(3, $subscriptions[2]['Subscription']['id']);
+      $this->assertEqual(6, $subscriptions[3]['Subscription']['id']);
       
     }
  

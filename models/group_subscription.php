@@ -18,12 +18,16 @@
     );
 
     /**
-    * 
+    * Returns the total resting subscriptions to receive a Mail.
+    * This will only return the subscriptions into opt_in.
+    * @param $mail_id The Mail id.
     * @param $options 
     * Accepts: 
     *   'count' => true - if you want the total resting subscriptions to send the Mail
     *   'limit' => number - if you want to limit the number of registries to fetch
     * @return
+    *   if 'count' => true, return the total resting subscriptions to receive the Mail.
+    *   else, returns the subscription data array resting to be sent, with the Subscription.id, Subscription.email, Subscription.name fields.
     * @access
     **/
     function restingSubscriptions($mail_id, $options=array()) {
@@ -47,7 +51,7 @@
       #unbind for performance gain
       $this->unbindModel(array('belongsTo' => array('Group')));
       
-      $result = $this->find('all', array('fields' => $fields, 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created', 'limit' => $limit));
+      $result = $this->find('all', array('fields' => $fields, 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent, 'Subscription.opt_out_date' => null), 'order' => 'Subscription.created', 'limit' => $limit));
       
        if($count) {
          return $result[0][0]['count'];

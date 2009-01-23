@@ -24,6 +24,10 @@
         'newsletter_group_id' => '3',
         'newsletter_subscription_id' => '5'
         ),
+        array ('id' => '6',
+        'newsletter_group_id' => '1',
+        'newsletter_subscription_id' => '6'
+        ),
     ); 
  } 
  ?> 

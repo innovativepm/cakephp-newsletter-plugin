@@ -47,14 +47,14 @@
 
         $this->assertEqual(3, count($rest));
         $this->assertEqual(2, $rest[0]['Subscription']['id']);
-        $this->assertEqual(3, $rest[1]['Subscription']['id']);
-        $this->assertEqual(4, $rest[2]['Subscription']['id']);
+        $this->assertEqual(4, $rest[1]['Subscription']['id']);
+        $this->assertEqual(6, $rest[2]['Subscription']['id']);
         
         $rest = $this->GroupSubscriptionTest->restingSubscriptions(1, array('limit' => 2));
 
         $this->assertEqual(2, count($rest));
         $this->assertEqual(2, $rest[0]['Subscription']['id']);
-        $this->assertEqual(3, $rest[1]['Subscription']['id']);
+        $this->assertEqual(4, $rest[1]['Subscription']['id']);
       }
   }
 ?>
