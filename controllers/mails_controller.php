@@ -40,12 +40,8 @@
 	    $mail = $this->Mail->read(null, $id);
 	    $count = $this->MailView->countViews($id);
 	    $countUnique = $this->MailView->countUniqueViews($id);
-	    
-	    $groups = $this->extractGroups($mail);
-      $last_sent = $mail['Mail']['last_sent_subscription_id'];
-        
-      $rest = $this->GroupSubscription->find('all', array('fields' => array('COUNT(DISTINCT Subscription.id) as count'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
-      $rest = $rest[0][0]['count'];
+      
+      $rest = $this->GroupSubscription->restingSubscriptions($id, array('count' => true));
 	    
 	    $this->set(compact('mail', 'count', 'countUnique', 'rest'));
 	  }
@@ -106,9 +102,8 @@
       $this->redirect(array('action' => 'index'));
     }
     
-    function admin_send($mail_id) {
-      $mail = $this->Mail->read(null, $mail_id);
-      $groups = $this->extractGroups($mail);
+    function admin_send($id) {
+      $mail = $this->Mail->read(null, $id);
       $last_sent = $mail['Mail']['last_sent_subscription_id'];
     
       $limit = Configure::read('Newsletter.sendX'); #the number of emails to send
@@ -117,8 +112,7 @@
       $interval = Configure::read('Newsletter.sendInterval'); #the interval time before send next batch
       if(!$interval) {$interval = 10;} #sets default value
         
-      $rest = $this->GroupSubscription->find('all', array('fields' => array('COUNT(DISTINCT Subscription.id) as count'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
-      $rest = $rest[0][0]['count'];
+      $rest = $this->GroupSubscription->restingSubscriptions($id, array('count' => true));
        
       $this->set('mail', $mail);   
       $this->set('sent', $mail['Mail']['sent']);  
@@ -131,23 +125,17 @@
     * This action sends the next x emails for this mail.
     * @param $mail_id The Mail id. 
     **/
-    function admin_send_mail($mail_id) {
+    function admin_send_mail($id) {
       $this->layout = 'clean';
     
-      $mail = $this->Mail->read(null, $mail_id);
+      $mail = $this->Mail->read(null, $id);
       $sent = $mail['Mail']['sent'];
-      $groups = $this->extractGroups($mail);
       
       #find next subscriptions to send email
-      
-      #unbind for performance gain
-      $this->GroupSubscription->unbindModel(array('belongsTo' => array('Group')));
-      
-      $last_sent = $mail['Mail']['last_sent_subscription_id']; #the last subscription_id that already received this mail
       $limit = Configure::read('Newsletter.sendX'); #the number of emails to send
       if(!$limit) {$limit = 10;} #sets default value
       
-      $subscriptions = $this->GroupSubscription->find('all', array('fields' => array('DISTINCT Subscription.id, Subscription.email, Subscription.name'), 'conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created', 'limit' => $limit));
+      $subscriptions = $this->GroupSubscription->restingSubscriptions($id, array('limit' => $limit));
       
       if(!empty($subscriptions)) {      
         $this->set('content', $mail['Mail']['content']);
@@ -164,22 +152,11 @@
         $this->Mail->saveField('sent', $sent);
       }
       
-      $rest = $this->GroupSubscription->find('count', array('conditions' => array('newsletter_group_id' => $groups, 'Subscription.id >' => $last_sent), 'order' => 'Subscription.created'));
+      $rest = $this->GroupSubscription->restingSubscriptions($id, array('count' => true));
       
       $this->set('sent', $sent);  
       $this->set('limit', $limit);
       $this->set('rest', $rest); 
-    }
-    
-    function extractGroups($data) {
-      $groups = array();
-      
-      if(!empty($data) && array_key_exists('Group', $data)) { 
-        foreach ($data['Group'] as $key => $group) {
-          array_push($groups, $group['id']);
-        }
-      }
-      return $groups;
     }
     
     function extractEmailAndName($data) {

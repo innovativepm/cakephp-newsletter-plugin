@@ -245,26 +245,6 @@ class MailsControllerTestCase extends CakeTestCase {
       $this->assertEqual(2, $this->Mails->viewVars['limit']);
     }
     
-    function testExtractGroups() {
-      $data = array('Group' => array(
-          0 => array('id' => 5  ),
-          1 => array('id' => 10),
-          2 => array('id' => 15)
-        )
-      );
-      
-      $result = $this->Mails->extractGroups($data);
-      $expected = array(5, 10, 15);
-      $this->assertEqual($expected, $result);
-      
-      #test empty
-      $data = array('Group' => array());
-      
-      $result = $this->Mails->extractGroups($data);
-      $expected = array();
-      $this->assertEqual($expected, $result);
-    }
-    
     function testExtractEmailAndName() {
       $data = array();
       array_push($data, array(
