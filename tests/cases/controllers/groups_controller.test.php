@@ -7,7 +7,7 @@ App::import('Controller', 'Newsletter.Groups');
 class TestGroupsController extends GroupsController {
     var $name = 'Groups';
     var $autoRender = false;
- 
+    
     function redirect($url, $status = null, $exit = true) {
         $this->redirectUrl = $url;
     }
