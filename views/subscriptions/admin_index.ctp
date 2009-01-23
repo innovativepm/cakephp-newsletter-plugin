@@ -41,7 +41,9 @@
             <tr<?php echo is_int($i / 2) ? ' class="alt"' : ''; ?>>
                 <td><?php echo $html->link($subscription['Subscription']['email'], array('action' => 'edit', 'admin' => true, $subscription['Subscription']['id'])); ?></td>
                 <td><?php echo $subscription['Subscription']['name']; ?></td>
-                <td><?php echo $subscription['Subscription']['opt_out_date']; ?> <?php echo $html->link(($subscription['Subscription']['opt_out_date'] ? __( '(unset)', true) : __( '(set)', true)), array('action' => 'invert_opt_out', 'admin' => true, $subscription['Subscription']['id'])); ?></td>
+                <td id="td_opt_out_<?php echo $subscription['Subscription']['id'] ?>"><?php echo $subscription['Subscription']['opt_out_date']; ?>
+                  <a href="#" onclick="changeOptOut(<?php echo $subscription['Subscription']['id'] ?>);"><?php echo ($subscription['Subscription']['opt_out_date'] ? __( '(unset)', true) : __( '(set)', true)) ?></a> 
+                </td>
                 <td><?php echo $time->niceShort($subscription['Subscription']['created']); ?></td>
 	              <td><?php echo $time->niceShort($subscription['Subscription']['modified']); ?></td>
                 <td><?php echo $html->link(__( 'Delete', true), array('action' => 'delete', 'admin' => true, $subscription['Subscription']['id'])); ?></td>
@@ -52,3 +54,11 @@
 </div>
 
 <?php echo $this->renderElement('admin_pagination'); ?>
+
+<script>
+  function changeOptOut(id) {
+    var td = $('#td_opt_out_'+id);
+    var url = "<?= 'http://'.$_SERVER['HTTP_HOST'].'/admin/newsletter/subscriptions/invert_opt_out/'?>"+id;
+    td.load(url);
+  }
+</script>

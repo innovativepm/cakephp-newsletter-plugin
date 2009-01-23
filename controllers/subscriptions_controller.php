@@ -162,8 +162,10 @@
       } else {
         $this->Subscription->saveField('opt_out_date', date('Y-m-d H:i:s'));
       }
-      $this->Session->setFlash(__('Subscription updated', true));
-      $this->redirect(array('action' => 'index'));
+      
+      $subscribed = $this->Subscription->read();
+      $this->layout = 'clean';
+      $this->set('subscription', $subscribed);
     }
     
     /*function admin_import_csv() {

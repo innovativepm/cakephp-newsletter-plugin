@@ -139,6 +139,9 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->admin_invert_opt_out(3);
       
+      $this->assertNotNull($this->Subscriptions->viewVars['subscription']);
+      $this->assertEqual('clean', $this->Subscriptions->layout);
+      
       //assert the record was changed
       $result = $this->Subscriptions->Subscription->read(null, 3); //already in opt_out
       $this->assertNull($result['Subscription']['opt_out_date']);
