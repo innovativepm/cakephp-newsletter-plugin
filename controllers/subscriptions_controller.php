@@ -32,9 +32,13 @@
           $subscription = $this->Subscription->read(); 
           $this->sendEmail($subject, 'unsubscribe', $subscription['Subscription']['email']);  
           
-          $this->Session->setFlash(__('The requested email was withdrawn from the mail list', true));
+          $message = Configure::read('Newsletter.unsubscribe_site_message');
+          if(!$message) {$message = __('The requested email was withdrawn from the mail list', true);}
+          $this->Session->setFlash($message);
         } else {
-          $this->Session->setFlash(__('Email not in subscription list', true));
+          $message = Configure::read('Newsletter.unsubscribe_not_found_site_message');
+          if(!$message) {$message = __('Email not in subscription list', true);}
+          $this->Session->setFlash($message);
         }
       }
     }
@@ -72,9 +76,13 @@
           $this->set('confirmation_code', $subscription['Subscription']['confirmation_code']);
           $this->sendEmail($subject, 'subscribe', $subscription['Subscription']['email']);  
           
-          $this->Session->setFlash(__('A confirmation message was sent to your email', true)); 
+          $message = Configure::read('Newsletter.subscribe_site_message');
+          if(!$message) {$message = __('A confirmation message was sent to your email', true);}
+          $this->Session->setFlash($message);
         } else {
-          $this->Session->setFlash(__('The requested email is already into the list', true));
+          $message = Configure::read('Newsletter.subscribe_already_in_list');
+          if(!$message) {$message = __('The requested email is already into the list', true);}
+          $this->Session->setFlash($message);
         }
       }
     }
@@ -90,9 +98,13 @@
         
         $this->set('subscribed', $subscribed);
         
-        $this->Session->setFlash(__('Subscription confirmed', true));
+        $message = Configure::read('Newsletter.subscribe_confirmation');
+        if(!$message) {$message = __('Subscription confirmed', true);}
+        $this->Session->setFlash($message);
       } else {
-        $this->Session->setFlash(__('Invalid confirmation code', true));
+        $message = Configure::read('Newsletter.subscribe_confirmation_invalid');
+        if(!$message) {$message = __('Invalid confirmation code', true);}
+        $this->Session->setFlash($message);
       }
     } 
     
