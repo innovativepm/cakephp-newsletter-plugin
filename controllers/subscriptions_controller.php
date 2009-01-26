@@ -193,18 +193,30 @@
 				  if(count($error)>0) {
 					  $errors = array_merge($errors, $error);
 				  } else {
+				    if(!array_key_exists(1, $line)) {
+				      $line[1] = '';
+				    }
 				    array_push($data, $line);
 				  }
 			  }
-			  
 			  $this->Subscription->importCsv($data);
-
 			  $this->set('errors', $errors);
-			  $this->Session->setFlash(__('Data imported', true));
-	      #$this->redirect(array('action' => 'index'));
+			  
+			  if(!empty($errors)) {
+			    $message = "<ul>";
+			    foreach ($errors as $error) {
+			      $message .= "<li>$error</li>";        
+			    }
+			    $message .= "</ul>";
+			    $message = __('Data imported, but there where the following errors: ', true).$message;
+			  } else {
+			    $message = __('Data imported', true);
+			  }
+			  $this->Session->setFlash($message);
+	      $this->redirect(array('action' => 'index'));
 		  } else {
 		    $this->Session->setFlash(__('No data to import', true));
-		    #$this->redirect(array('action' => 'index'));
+		    $this->redirect(array('action' => 'index'));
 		  }
     }
     
@@ -240,8 +252,7 @@
 
 		  if($line[0] == null || $line[0] == '') {
 			  array_push($errors, "Error in line $line_number: blank email");
-		  }
-
+		  } 
 		  return $errors;
 	  }
   }

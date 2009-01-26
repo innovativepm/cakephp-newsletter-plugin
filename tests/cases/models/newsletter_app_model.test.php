@@ -17,11 +17,10 @@
       }
       
       function testInsertMulti() {
-        $table = $this->NewsletterAppModelTest->useTable;
         $fields = array('email', 'name');
         $values = array(array('multi@multi.com','multi'), array('multi2@multi.com', 'multi2'), array('multi3@multi.com', 'multi3'));
         
-        $this->NewsletterAppModelTest->insertMulti($table, $fields, $values);
+        $this->NewsletterAppModelTest->insertMulti($fields, $values);
         
         $found = $this->NewsletterAppModelTest->findByEmail('multi@multi.com');
         $this->assertEqual('multi', $found['Subscription']['name']);

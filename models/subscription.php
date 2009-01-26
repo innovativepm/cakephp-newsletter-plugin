@@ -60,7 +60,7 @@
 		   )
 		**/
 		function importCsv($data) {
-		  $this->insertMulti($this->useTable, array('email', 'name'),	$data); 			
+		  $this->insertMulti(array('email', 'name'),	$data); 			
 		}
 		
   }

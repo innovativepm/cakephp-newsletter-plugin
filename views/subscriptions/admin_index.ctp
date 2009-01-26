@@ -14,7 +14,8 @@
 </ul>
 
 <?= $form->create('Subscription', array('url' => '/admin/newsletter/subscriptions/import_csv', 'type' => 'file')) ?>
-  <p><?= __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes)", true) ?></p>
+  <p><?= __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes).", true) ?></p>
+  <p><?= __("This can take a while if there are many registries, so please be patient.", true) ?></p>
   <?= $form->file('csv', array('size' => '40'))?>
 <?= $form->end(__('Import', true)) ?>
 

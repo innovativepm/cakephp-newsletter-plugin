@@ -4,9 +4,15 @@ class NewsletterAppModel extends AppModel {
     function escape($string) {
 		  return "'$string'";
 		}
-		
-		#Reimplementation to ignore existing values
-		function insertMulti($table, $fields, $values) {
+
+		/**
+		* Reimplementation to ignore existing values
+		* @return
+		* @access
+		**/
+		function insertMulti($fields, $values, $table=null) {
+		  if(!$table) {$table = $this->useTable;}
+
 		  $db =& ConnectionManager::getDataSource($this->useDbConfig);
       $table = $db->fullTableName($table);
       if (is_array($fields)) {
@@ -17,10 +23,8 @@ class NewsletterAppModel extends AppModel {
         $values[$key] = '('.join(', ', array_map(array(&$this, 'escape'), $line)).')';
 		  }
 		  
-      $count = count($values);
-      for ($x = 0; $x < $count; $x++) {
-          $this->query("INSERT IGNORE INTO {$table} ({$fields}) VALUES {$values[$x]}");
-      }
+      $sql_values = join(', ', $values); 
+      $this->query("INSERT IGNORE INTO {$table} ({$fields}) VALUES {$sql_values};");		      
      }
 }
 ?>
