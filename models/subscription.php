@@ -58,9 +58,29 @@
 		      'name2'
 		    )
 		   )
+		  @param $groups An array with the groups the imported users should be added to.
 		**/
-		function importCsv($data) {
-		  $this->insertMulti(array('email', 'name'),	$data); 			
+		function importCsv($data, $groups=array()) {
+		  $this->insertMulti(array('email', 'name'),	$data); 	
+		  
+		  if(!empty($groups)) {
+		    $emails = array();
+		    foreach ($data as $value) {
+		      array_push($emails, $value[0]);
+		    }
+		    
+		    $this->unbindModel(array('hasAndBelongsToMany' => array('Group')));
+		    $ids = $this->find('all', array('fields' => array('id'), 'conditions' => array('email' => $emails)));
+		    
+		    $values = array();
+		    foreach ($ids as $id) {
+		      foreach ($groups as $group_id) {
+		        array_push($values, array($id['Subscription']['id'], $group_id));
+		      }
+		    }
+		    
+		    $this->insertMulti(array('newsletter_subscription_id', 'newsletter_group_id'),	$values, 'newsletter_groups_subscriptions');
+		  }	
 		}
 		
   }

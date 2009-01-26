@@ -122,6 +122,7 @@
 				);
 	    }
 		  $this->set('subscriptions', $this -> paginate('Subscription', $conditions));
+		  $this->set('groups', $this->Group->find('list'));
 	  }
 	  
 	  function admin_add() {
@@ -199,7 +200,7 @@
 				    array_push($data, $line);
 				  }
 			  }
-			  $this->Subscription->importCsv($data);
+			  $this->Subscription->importCsv($data, $this->data['Group']['Group']);
 			  $this->set('errors', $errors);
 			  
 			  if(!empty($errors)) {

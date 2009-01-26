@@ -13,11 +13,12 @@
   <li><?php echo $html->link(__('Add subscription', true), '/admin/newsletter/subscriptions/add', array('class' => 'button add')); ?></li>
 </ul>
 
-<?= $form->create('Subscription', array('url' => '/admin/newsletter/subscriptions/import_csv', 'type' => 'file')) ?>
-  <p><?= __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes).", true) ?></p>
-  <p><?= __("This can take a while if there are many registries, so please be patient.", true) ?></p>
-  <?= $form->file('csv', array('size' => '40'))?>
-<?= $form->end(__('Import', true)) ?>
+<?php echo $form->create('Subscription', array('url' => '/admin/newsletter/subscriptions/import_csv', 'type' => 'file')) ?>
+  <p><?php echo __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes).", true) ?></p>
+  <p><?php echo __("This can take a while if there are many registries, so please be patient.", true) ?></p>
+  <?php echo $form->file('csv', array('size' => '40'))?>
+  <?php echo $form->input('Group') ?>
+<?php echo $form->end(__('Import', true)) ?>
 
 <?php echo $form->create('Filter', array('url' => '/admin/newsletter/subscriptions/index' ) ); ?>
 <?php echo $form->input('Filter.value', array('label' => __('Filter', true))); ?>
@@ -59,7 +60,7 @@
 <script>
   function changeOptOut(id) {
     var td = $('#td_opt_out_'+id);
-    var url = "<?= 'http://'.$_SERVER['HTTP_HOST'].'/admin/newsletter/subscriptions/invert_opt_out/'?>"+id;
+    var url = "<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/admin/newsletter/subscriptions/invert_opt_out/'?>"+id;
     td.load(url);
   }
 </script>

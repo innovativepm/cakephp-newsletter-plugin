@@ -56,6 +56,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       
       $this->assertNotNull($this->Subscriptions->viewVars['subscriptions']);
       $this->assertEqual('1', $this->Subscriptions->viewVars['subscriptions'][0]['Subscription']['id']);
+      $this->assertNotNull($this->Subscriptions->viewVars['groups']);
     }
     
     function testAdminAdd() {
@@ -278,7 +279,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
     }
     
-    /*function testValidateCSVLine() {
+    function testValidateCSVLine() {
       #test for valid line
       $line = array();
       array_push($line, 'valid@email.com');
@@ -294,7 +295,13 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       
       $errors = $this->Subscriptions->validateCSVLine($line, 1);
       $this->assertTrue(!empty($errors));
-    }*/
+    }
+    
+    function testAdminImportCsv() {
+      $this->Subscriptions->admin_import_csv();
+      $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
+      $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'index'));
+    }
  
     function endTest() {
       $this->Subscriptions->Session->destroy();

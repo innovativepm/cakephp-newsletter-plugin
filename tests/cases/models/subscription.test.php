@@ -1,15 +1,18 @@
 <?php 
   App::import('Model', 'Newsletter.Subscription');
   App::import('Model', 'Newsletter.Group');
+  App::import('Model', 'Newsletter.GroupSubscription');
 
   class SubscriptionCase extends CakeTestCase {
 
       var $fixtures = array('plugin.newsletter.groups_subscriptions', 'plugin.newsletter.group', 'plugin.newsletter.subscription');
       var $SubscriptionTest;
+      var $GroupSubscriptionTest;
       
       function start() {
 		    parent::start();
 		    $this->SubscriptionTest = ClassRegistry::init('Subscription');
+		    $this->GroupSubscriptionTest = ClassRegistry::init('GroupSubscription');
 	    }
       
       function testValidateName() {
@@ -91,18 +94,28 @@
       function testImportCsv() {
         $table = $this->SubscriptionTest->useTable;
         $fields = array('email', 'name');
-        $values = array(array('multi@multi.com','multi'), array('multi2@multi.com', 'multi2'), array('multi3@multi.com', 'multi3'));
+        $values = array(array('multi@multi.com','multi'), array('multi2@multi.com', 'multi2'));
+        $groups = array(1,2);
         
-        $this->SubscriptionTest->importCsv($values);
+        $this->SubscriptionTest->importCsv($values, $groups);
         
         $found = $this->SubscriptionTest->findByEmail('multi@multi.com');
         $this->assertEqual('multi', $found['Subscription']['name']);
         
+        $group_found = $this->GroupSubscriptionTest->find('first', array('conditions' => array('newsletter_subscription_id' => $found['Subscription']['id'], 'newsletter_group_id' => 1)));
+        $this->assertNotNull($group_found['Subscription']['name']);
+        
+        $group_found = $this->GroupSubscriptionTest->find('first', array('conditions' => array('newsletter_subscription_id' => $found['Subscription']['id'], 'newsletter_group_id' => 2)));
+        $this->assertNotNull($group_found['Subscription']['name']);
+        
         $found = $this->SubscriptionTest->findByEmail('multi2@multi.com');
         $this->assertEqual('multi2', $found['Subscription']['name']);
         
-        $found = $this->SubscriptionTest->findByEmail('multi3@multi.com');
-        $this->assertEqual('multi3', $found['Subscription']['name']);
+        $group_found = $this->GroupSubscriptionTest->find('first', array('conditions' => array('newsletter_subscription_id' => $found['Subscription']['id'], 'newsletter_group_id' => 1)));
+        $this->assertNotNull($group_found['Subscription']['name']);
+        
+        $group_found = $this->GroupSubscriptionTest->find('first', array('conditions' => array('newsletter_subscription_id' => $found['Subscription']['id'], 'newsletter_group_id' => 2)));
+        $this->assertNotNull($group_found['Subscription']['name']);
       }
 
   }
