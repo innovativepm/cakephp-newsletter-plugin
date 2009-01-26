@@ -123,6 +123,7 @@
 	    }
 		  $this->set('subscriptions', $this -> paginate('Subscription', $conditions));
 		  $this->set('groups', $this->Group->find('list'));
+		  $this->set('siteGroup', Configure::read('Newsletter.siteGroup'));
 	  }
 	  
 	  function admin_add() {
@@ -133,6 +134,8 @@
                 $this->redirect(array('action' => 'edit', 'id' => $this->Subscription->id));
             }
         }
+        
+        $this->set('siteGroup', Configure::read('Newsletter.siteGroup'));
         $this->set('groups', $this->Group->find('list'));
     }
 

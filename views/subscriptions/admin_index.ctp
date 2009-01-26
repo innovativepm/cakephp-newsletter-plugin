@@ -17,7 +17,7 @@
   <p><?php echo __("Import a CSV file (must be in the format: 'user@email.com, User Name', without quotes).", true) ?></p>
   <p><?php echo __("This can take a while if there are many registries, so please be patient.", true) ?></p>
   <?php echo $form->file('csv', array('size' => '40'))?>
-  <?php echo $form->input('Group') ?>
+  <?php echo $form->input('Group', array('selected' => $siteGroup)) ?>
 <?php echo $form->end(__('Import', true)) ?>
 
 <?php echo $form->create('Filter', array('url' => '/admin/newsletter/subscriptions/index' ) ); ?>

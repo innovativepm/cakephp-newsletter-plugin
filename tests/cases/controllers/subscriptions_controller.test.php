@@ -42,6 +42,8 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
     }
     
     function testAdminIndex() {
+      Configure::write('Newsletter.siteGroup', 1);
+    
       $this->Subscriptions->beforeFilter();
       $this->Subscriptions->Component->startup($this->Subscriptions);
       $this->Subscriptions->admin_index();
@@ -57,9 +59,11 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       $this->assertNotNull($this->Subscriptions->viewVars['subscriptions']);
       $this->assertEqual('1', $this->Subscriptions->viewVars['subscriptions'][0]['Subscription']['id']);
       $this->assertNotNull($this->Subscriptions->viewVars['groups']);
+      $this->assertEqual(1, $this->Subscriptions->viewVars['siteGroup']);
     }
     
     function testAdminAdd() {
+      Configure::write('Newsletter.siteGroup', 1);
       $this->Subscriptions->data = array(
         'Subscription' => array(
             'name' => 'Fake Subscription',
@@ -80,6 +84,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
       $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'edit', 'id' => $this->Subscriptions->Subscription->id));
+      $this->assertEqual(1, $this->Subscriptions->viewVars['siteGroup']);
     }
     
     function testAdminEdit() {
