@@ -180,7 +180,7 @@
       $this->set('subscription', $subscribed);
     }
     
-    /*function admin_import_csv() {
+    function admin_import_csv() {
       if (!empty($this->data) && is_uploaded_file($this->data['Subscription']['csv']['tmp_name'])) {
 		    set_time_limit(0);
 		    
@@ -193,24 +193,20 @@
 				  if(count($error)>0) {
 					  $errors = array_merge($errors, $error);
 				  } else {
-				    $line_data = array('Subscription' => array('email' => $line[0], 'name' => $line[1]));
-				    array_push($data, $line_data);
-				    #$this->Subscription->create(array('id' => null, 'Subscription' => array('email' => $line[0], 'name' => $line[1])));
-				    #$this->Subscription->save();
+				    array_push($data, $line);
 				  }
 			  }
 			  
-			  $this->Subscription->saveSubscriptionsBatchMode($data);
-			  #debug($data);
+			  $this->Subscription->importCsv($data);
 
 			  $this->set('errors', $errors);
 			  $this->Session->setFlash(__('Data imported', true));
-	      $this->redirect(array('action' => 'index'));
+	      #$this->redirect(array('action' => 'index'));
 		  } else {
 		    $this->Session->setFlash(__('No data to import', true));
-		    $this->redirect(array('action' => 'index'));
+		    #$this->redirect(array('action' => 'index'));
 		  }
-    }*/
+    }
     
     /**
 	  * Reads a CSV file and returns a list with each line.
@@ -218,7 +214,7 @@
 	  * @return An array with each line.
 	  * @access private
 	  **/
-	  /*function readUploadedCSV($tmp_name) {
+	  function readUploadedCSV($tmp_name) {
 		  $lines = array();
 
 		  ini_set('auto_detect_line_endings',1);
@@ -227,7 +223,7 @@
 			  array_push($lines,$data);			 
 		  }
 		  return $lines;
-	  }*/
+	  }
 	  
 	  /**
 	  * Validates a csv line, verifying if it has a valid email.
@@ -235,7 +231,7 @@
 	  * @return Array with errors, if any. False otherwise.
 	  * @access true
 	  **/
-	  /*function validateCSVLine($line, $line_number) {
+	  function validateCSVLine($line, $line_number) {
 		  $errors = array();
 
 		  if(!is_array($line)) {
@@ -247,6 +243,6 @@
 		  }
 
 		  return $errors;
-	  }*/
+	  }
   }
 ?>

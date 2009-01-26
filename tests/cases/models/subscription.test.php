@@ -87,6 +87,23 @@
         $this->assertEqual('1', $subscription['Group'][0]['id']);
         $this->assertFalse(array_key_exists(1, $subscription['Group']));
       }
+      
+      function testImportCsv() {
+        $table = $this->SubscriptionTest->useTable;
+        $fields = array('email', 'name');
+        $values = array(array('multi@multi.com','multi'), array('multi2@multi.com', 'multi2'), array('multi3@multi.com', 'multi3'));
+        
+        $this->SubscriptionTest->importCsv($values);
+        
+        $found = $this->SubscriptionTest->findByEmail('multi@multi.com');
+        $this->assertEqual('multi', $found['Subscription']['name']);
+        
+        $found = $this->SubscriptionTest->findByEmail('multi2@multi.com');
+        $this->assertEqual('multi2', $found['Subscription']['name']);
+        
+        $found = $this->SubscriptionTest->findByEmail('multi3@multi.com');
+        $this->assertEqual('multi3', $found['Subscription']['name']);
+      }
 
   }
 ?>

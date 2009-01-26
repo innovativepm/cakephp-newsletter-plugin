@@ -46,22 +46,22 @@
 		);
 		
 		/**
-		* Save many subscriptions in batch (as data read from a csv file).
-		* @param $data An array with data to be inserted (the same needed for a saveAll() call).
-		* @return True if everything ok
+		* Imports a Csv data array to the database.
+		* @param $data In the pattern:
+		*  array(
+		    array[0] (
+		      'email',
+		      'name'
+		    ),
+		    array[1] (
+		      'email2',
+		      'name2'
+		    )
+		   )
 		**/
-		/*function saveSubscriptionsBatchMode($data) {
-		  $table_name = $this->useTable;
-		  $sql = "LOCK TABLES `$table_name` WRITE;";
-		  foreach ($data as $key => $value)  {
-        $email = $value[$this->name]['email'];
-        $name = $value[$this->name]['name'];
-        
-        $sql .= "INSERT INTO `$table_name` (email, name) VALUES ('$email', '$name');";
-		  }
-		  $sql .= "UNLOCK TABLES;";
-		  $this->query($sql);
-		  #debug($sql);
-		}*/
+		function importCsv($data) {
+		  $this->insertMulti($this->useTable, array('email', 'name'),	$data); 			
+		}
+		
   }
 ?>
