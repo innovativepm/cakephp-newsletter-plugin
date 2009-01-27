@@ -30,6 +30,7 @@
           if(!$subject) { $subject = 'Unsubscribe Confirmation'; }
            
           $subscription = $this->Subscription->read(); 
+          $this->set('url', Configure::read('Newsletter.subscribe_url'));
           $this->sendEmail($subject, 'unsubscribe', $subscription['Subscription']['email']);  
           
           $message = Configure::read('Newsletter.unsubscribe_site_message');
@@ -74,6 +75,7 @@
            
           $subscription = $this->Subscription->read(null, $this->Subscription->id); 
           $this->set('confirmation_code', $subscription['Subscription']['confirmation_code']);
+          $this->set('url', Configure::read('Newsletter.confirm_url'));
           $this->sendEmail($subject, 'subscribe', $subscription['Subscription']['email']);  
           
           $message = Configure::read('Newsletter.subscribe_site_message');
@@ -91,10 +93,9 @@
       $subscribed = $this->Subscription->findByConfirmationCode($id);
       
       if(!empty($id) && !empty($subscribed)) {
-        $subscribed['Subscription']['opt_out_date'] = null;
-        $subscribed['Subscription']['confirmation_code'] = null;
         $this->Subscription->set($subscribed);
-        $this->Subscription->save();
+        $this->Subscription->saveField('opt_out_date', null);
+        $this->Subscription->saveField('confirmation_code', null);
         
         $this->set('subscribed', $subscribed);
         

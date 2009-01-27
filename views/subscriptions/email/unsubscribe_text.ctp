@@ -1,6 +1,12 @@
 <? 
 $message = Configure::read('Newsletter.unsubscribe_message_text');
 if($message) {
+  if(!$url) {
+    $url = "http://".$_SERVER['HTTP_HOST']."/newsletter/subscriptions/subscribe";
+  } else {
+    $url = "http://".$_SERVER['HTTP_HOST']."$url";
+  }
+  $message = str_replace('@@link@@', $url, $message);
   echo $message;
 } else {
 ?>

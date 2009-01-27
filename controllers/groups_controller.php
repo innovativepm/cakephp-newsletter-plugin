@@ -27,7 +27,7 @@
 	  }
 	  
 	  function admin_list_subscriptions($id) {
-	    $subcriptions = $this->paginate('GroupSubscription', array('GroupSubscription.newsletter_group_id' => $id));
+	    $subcriptions = $this->paginate('GroupSubscription', array('GroupSubscription.newsletter_group_id' => $id, 'Subscription.id <>' => null));
 	    $this->set('subscriptions', $subcriptions);
 	    $this->set('group', $this->Group->read(null, $id)); 
 	  }

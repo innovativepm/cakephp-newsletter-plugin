@@ -3,7 +3,12 @@
 <? 
 $message = Configure::read('Newsletter.mail_opt_out_message');
 if($message) {
-  $url = "http://".$_SERVER['HTTP_HOST']."/newsletter/subscriptions/unsubscribe";
+  if(!$url) {
+    $url = "http://".$_SERVER['HTTP_HOST']."/newsletter/subscriptions/unsubscribe";
+  } else {
+     $url = "http://".$_SERVER['HTTP_HOST']."$url";
+  }
+  
   $message = str_replace('@@link@@', $url, $message);
   echo $message;
 } else {

@@ -1,6 +1,13 @@
 <? 
 $message = Configure::read('Newsletter.subscribe_message_text');
 if($message) {
+  if(!$url) {
+    $url = "http://".$_SERVER['HTTP_HOST']."/newsletter/subscriptions/confirm_subscription/".$confirmation_code;
+  } else {
+    $url = "http://".$_SERVER['HTTP_HOST']."$url".$confirmation_code;
+  }
+  $message = str_replace('@@link@@', $url, $message);
+  
   echo $message;
 } else {
 ?>

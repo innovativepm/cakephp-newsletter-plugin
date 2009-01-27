@@ -140,6 +140,7 @@
       if(!empty($subscriptions)) {      
         $this->set('content', $mail['Mail']['content']);
         $this->set('readConfirmationCode', $mail['Mail']['read_confirmation_code']);
+        $this->set('url', Configure::read('Newsletter.unsubscribe_url'));
         $this->sendEmail($mail['Mail']['subject'], 'mail', $this->extractEmailAndName($subscriptions), $mail['Mail']['from_email'], $mail['Mail']['from']);
         
         #updated 'last_sent_subscription_id' and 'sent'

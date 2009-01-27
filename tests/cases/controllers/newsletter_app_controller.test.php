@@ -23,6 +23,7 @@ class TestNewsletterAppController extends SubscriptionsController {
     function _stop($status = 0) {
         $this->stopped = $status;
     }
+    
 }
  
 class NewsletterAppControllerTestCase extends CakeTestCase {
