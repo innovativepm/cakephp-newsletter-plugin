@@ -33,8 +33,8 @@ CREATE TABLE  `newsletter_mails` (
   `subject` varchar(100) default NULL,
   `content` text,
   `read_confirmation_code` varchar(100) default NULL,
-  `last_sent_subscription_id` int(10) unsigned NOT NULL,
-  `sent` int(10) unsigned NOT NULL,
+  `last_sent_subscription_id` int(10) unsigned NOT NULL default '0',
+  `sent` int(10) unsigned NOT NULL default '0',
   `created` datetime default NULL,
   `modified` datetime default NULL,
   PRIMARY KEY  (`id`)
