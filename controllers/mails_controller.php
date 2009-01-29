@@ -66,7 +66,7 @@ class MailsController extends NewsletterAppController {
           $this->Mail->set($this->data);
           if($this->Mail->save()) {
               $this->Session->setFlash(__('Mail successfully added', true));
-              $this->redirect(array('action' => 'edit', 'id' => $this->Mail->id));
+              $this->redirect(array('action' => 'index'));
           }
       }
       $this->set('groups', $this->Group->find('list'));

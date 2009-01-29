@@ -141,7 +141,7 @@ class SubscriptionsController extends NewsletterAppController {
           $this->Subscription->set($this->data);
           if($this->Subscription->save()) {
               $this->Session->setFlash(__('Subscription successfully added', true));
-              $this->redirect(array('action' => 'edit', 'id' => $this->Subscription->id));
+              $this->redirect(array('action' => 'index'));
           }
       }
       

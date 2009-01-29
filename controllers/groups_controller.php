@@ -46,7 +46,7 @@ class GroupsController extends NewsletterAppController {
           $this->Group->set($this->data);
           if($this->Group->save()) {
               $this->Session->setFlash(__('Group successfully added', true));
-              $this->redirect(array('action' => 'edit', 'id' => $this->Group->id));
+              $this->redirect(array('action' => 'index'));
           }
       }
   }

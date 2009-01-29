@@ -83,7 +83,7 @@ class SubscriptionsControllerTestCase extends CakeTestCase {
       
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Subscriptions->Session->check('Message.flash.message'));
-      $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'edit', 'id' => $this->Subscriptions->Subscription->id));
+      $this->assertEqual($this->Subscriptions->redirectUrl, array('action' => 'index'));
       $this->assertEqual(1, $this->Subscriptions->viewVars['siteGroup']);
     }
     

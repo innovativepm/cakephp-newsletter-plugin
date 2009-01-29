@@ -63,7 +63,7 @@ class GroupsControllerTestCase extends CakeTestCase {
     
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Groups->Session->check('Message.flash.message'));
-      $this->assertEqual($this->Groups->redirectUrl, array('action' => 'edit', 'id' => $this->Groups->Group->id));
+      $this->assertEqual($this->Groups->redirectUrl, array('action' => 'index'));
     }
     
     function testAdminEdit() {

@@ -95,7 +95,7 @@ class MailsControllerTestCase extends CakeTestCase {
     
       //assert that some sort of session flash was set.
       $this->assertTrue($this->Mails->Session->check('Message.flash.message'));
-      $this->assertEqual($this->Mails->redirectUrl, array('action' => 'edit', 'id' => $this->Mails->Mail->id));
+      $this->assertEqual($this->Mails->redirectUrl, array('action' => 'index'));
       
       $this->assertNotNull($this->Mails->viewVars['groups']);
     }
