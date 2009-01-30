@@ -104,7 +104,7 @@ class MailsController extends NewsletterAppController {
     $mail = $this->Mail->read(null, $mail_id);
     
     $this->Mail->id = $mail['Mail']['id'];
-    $this->Mail->saveField('last_sent_subscription_id', null);
+    $this->Mail->saveField('last_sent_subscription_id', 0);
     $this->Mail->saveField('sent', 0);
     
     $this->Session->setFlash(__('Mail reseted', true));
