@@ -43,7 +43,12 @@
             <tr<?php echo is_int($i / 2) ? ' class="alt"' : ''; ?>>
                 <td><?php echo $html->link($subscription['Subscription']['email'], array('action' => 'edit', 'admin' => true, $subscription['Subscription']['id'])); ?></td>
                 <td><?php echo $subscription['Subscription']['name']; ?></td>
-                <td id="td_opt_out_<?php echo $subscription['Subscription']['id'] ?>"><?php echo $subscription['Subscription']['opt_out_date']; ?>
+                <td id="td_opt_out_<?php echo $subscription['Subscription']['id'] ?>">
+                  <?php if(!$subscription['Subscription']['opt_out_date']) { ?>
+                    <?php echo __('Yes') ?>
+                  <?php } else { ?>
+                    <?php echo __('No, at ') . $subscription['Subscription']['opt_out_date'] ?>
+                  <?php } ?>
                   <a href="#" onclick="changeOptOut(<?php echo $subscription['Subscription']['id'] ?>);"><?php echo ($subscription['Subscription']['opt_out_date'] ? __( '(unset)', true) : __( '(set)', true)) ?></a> 
                 </td>
                 <td><?php echo $time->niceShort($subscription['Subscription']['created']); ?></td>
